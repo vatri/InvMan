@@ -25,3 +25,16 @@ By default use following:
 username: b
 pass: b
 ```
+## ROADMAP
+
+### PHASE 1
+
+- Basic dashboard
+- Product management
+- Product group management
+- Orders management
+- Stock list
+
+### PHASE 2
+
+[todo]

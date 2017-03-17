@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#hideLabels" onMouseClicked="#hideLabels" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.AddEditProductController">
+  <children>
+    <Label layoutX="16.0" layoutY="27.0" text="Product">
+      <font>
+        <Font size="28.0" />
+      </font>
+    </Label>
+    <Label layoutX="16.0" layoutY="92.0" text="Product name*" />
+    <TextField fx:id="fldName" layoutX="124.0" layoutY="85.0" prefHeight="30.0" prefWidth="200.0" />
+    <Label layoutX="82.0" layoutY="129.0" text="Price" />
+    <TextField fx:id="fldPrice" layoutX="124.0" layoutY="122.0" prefHeight="30.0" prefWidth="63.0" />
+    <ComboBox fx:id="groupCombo" layoutX="124.0" layoutY="196.0" prefWidth="200.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList" />
+      </items>
+    </ComboBox>
+    <Button layoutX="228.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSaveProduct" prefHeight="33.0" prefWidth="96.0" text="Save" />
+    <Label layoutX="74.0" layoutY="199.0" text="Group" />
+    <Label fx:id="errorLabel" layoutX="16.0" layoutY="251.0" text="ERROR: invalid data!" textFill="RED" visible="false">
+      <font>
+        <Font name="System Bold" size="13.0" fx:id="x1" />
+      </font>
+    </Label>
+    <Label id="savedMessage" fx:id="savedLabel" focusTraversable="false" font="$x1" layoutX="16.0" layoutY="251.0" text="Product Saved!" textFill="GREEN" visible="false" />
+    <Hyperlink layoutX="224.0" layoutY="32.0" onAction="#handleBack" text="&lt; Back to list" textFill="#1400ff">
+      <font>
+        <Font size="14.0" />
+      </font>
+    </Hyperlink>
+    <Label layoutX="16.0" layoutY="161.0" text="(This price is visible ONLY if the group price is not set)">
+      <font>
+        <Font size="11.0" />
+      </font>
+    </Label>
+  </children>
+</AnchorPane>

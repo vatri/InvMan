@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="665.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.ProductsController">
+  <children>
+    <TableView id="table-products" fx:id="tblProducts" focusTraversable="true" layoutX="14.0" layoutY="63.0" onMouseClicked="#openProduct" prefHeight="280.0" prefWidth="599.0" rotate="0.0">
+      <columns>
+        <TableColumn prefWidth="50.0" text="ID" fx:id="idCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="244.0" text="Product" fx:id="productCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="200.0" text="Group" fx:id="groupCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="104.0" text="Price" fx:id="priceCol" />
+      </columns>
+    </TableView>
+    <Label layoutX="14.0" layoutY="14.0" text="Products">
+      <font>
+        <Font size="25.0" />
+      </font>
+    </Label>
+    <Button fx:id="btnAddProd" layoutX="152.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleAddProd" prefHeight="30.0" prefWidth="95.0" text="Add" />
+  </children>
+</AnchorPane>

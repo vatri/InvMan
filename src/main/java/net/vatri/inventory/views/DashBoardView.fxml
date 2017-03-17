@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.DashboardController">
+  <children>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dfdfdf" height="71.0" layoutX="14.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" width="167.0" />
+    <Label alignment="CENTER_LEFT" contentDisplay="LEFT" layoutX="14.0" layoutY="14.0" text="DASHBOARD">
+      <font>
+        <Font size="23.0" />
+      </font>
+    </Label>
+    <Label layoutX="27.0" layoutY="75.0" text="Products:">
+      <font>
+        <Font size="20.0" fx:id="x1" />
+      </font>
+    </Label>
+    <Label fx:id="productsNumber" layoutX="130.0" layoutY="73.0" text="-">
+      <font>
+        <Font size="25.0" fx:id="x2" />
+      </font>
+    </Label>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" height="71.0" layoutX="193.0" layoutY="52.0" stroke="BLACK" strokeType="INSIDE" width="167.0">
+      <fill>
+        <Color blue="0.875" green="0.875" red="0.875" fx:id="x3" />
+      </fill>
+    </Rectangle>
+    <Label font="$x1" layoutX="206.0" layoutY="74.0" text="Groups" />
+    <Label fx:id="groupsNumber" font="$x2" layoutX="309.0" layoutY="72.0" text="-" />
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="$x3" height="71.0" layoutX="388.0" layoutY="52.0" stroke="BLACK" strokeType="INSIDE" width="167.0" />
+    <Label font="$x1" layoutX="401.0" layoutY="74.0" text="Orders" />
+    <Label fx:id="ordersNumber" font="$x2" layoutX="504.0" layoutY="72.0" text="-" />
+    <BarChart fx:id="ordersChart" barGap="5.0" categoryGap="10.0" layoutX="14.0" layoutY="184.0" legendVisible="false" prefHeight="202.0" prefWidth="540.9999000000025" title="ORDER STATS" titleSide="TOP">
+      <xAxis>
+        <CategoryAxis fx:id="x" label="Month" side="BOTTOM" />
+      </xAxis>
+      <yAxis>
+        <NumberAxis fx:id="y" label="Orders" side="LEFT" />
+      </yAxis>
+    </BarChart>
+  </children>
+</AnchorPane>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.StockController">
+  <children>
+    <Label layoutX="16.0" layoutY="27.0" text="Stock">
+      <font>
+        <Font size="28.0" />
+      </font>
+    </Label>
+    <TableView fx:id="tblStock" layoutX="16.0" layoutY="89.0" prefHeight="200.0" prefWidth="562.0">
+      <columns>
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="211.0" text="Product" fx:id="colProduct" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="274.0" text="Variant" fx:id="colVariant" />
+        <TableColumn prefWidth="75.0" text="Qty" fx:id="colStock" />
+      </columns>
+    </TableView>
+  </children>
+</AnchorPane>

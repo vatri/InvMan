@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#hideLabels" onMouseClicked="#hideLabels" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.AddEditGroupController">
+  <children>
+    <Label layoutX="16.0" layoutY="27.0" text="Group">
+      <font>
+        <Font size="28.0" />
+      </font>
+    </Label>
+    <Label layoutX="16.0" layoutY="92.0" text="Group name*" />
+    <TextField fx:id="fldName" layoutX="124.0" layoutY="85.0" prefHeight="30.0" prefWidth="299.0" />
+    <Label layoutX="82.0" layoutY="129.0" text="Price" />
+    <TextField fx:id="fldPrice" layoutX="124.0" layoutY="122.0" prefHeight="30.0" prefWidth="63.0" />
+    <Label layoutX="61.0" layoutY="170.0" text="Variants" />
+    <TextField fx:id="fldVariants" layoutX="125.0" layoutY="163.0" prefHeight="30.0" prefWidth="299.0" />
+    <Button layoutX="328.0" layoutY="240.0" mnemonicParsing="false" onAction="#saveGroup" prefHeight="33.0" prefWidth="96.0" text="Save" />
+    <Label fx:id="errorLabel" layoutX="156.0" layoutY="249.0" text="ERROR: invalid data!" textFill="RED" visible="false">
+      <font>
+        <Font name="System Bold" size="13.0" fx:id="x1" />
+      </font>
+    </Label>
+    <Label id="savedMessage" fx:id="savedLabel" focusTraversable="false" font="$x1" layoutX="208.0" layoutY="249.0" text="Group Saved!" textFill="GREEN" visible="false" />
+    <Hyperlink layoutX="323.0" layoutY="32.0" onAction="#handleBack" text="&lt; Back to list" textFill="#1400ff">
+      <font>
+        <Font size="14.0" />
+      </font>
+    </Hyperlink>
+    <Label layoutX="191.0" layoutY="131.0" text="Will be applied to all products from group.">
+      <font>
+        <Font size="11.0" fx:id="x2" />
+      </font>
+    </Label>
+    <Label font="$x2" layoutX="125.0" layoutY="197.0" text="(Comma separated)" />
+    <Label font="$x2" layoutX="125.0" layoutY="215.0" text="* Variants used in orders can NOT be deleted!" />
+  </children>
+</AnchorPane>

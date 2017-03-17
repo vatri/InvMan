@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="665.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.OrdersController">
+  <children>
+    <TableView id="" fx:id="tblOrders" focusTraversable="true" layoutX="16.0" layoutY="122.0" onMouseClicked="#openOrder" prefHeight="255.0" prefWidth="600.0" rotate="0.0">
+      <columns>
+        <TableColumn prefWidth="40.0" text="ID" fx:id="idCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="130.0" text="Name" fx:id="nameCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="70.0" text="Type" fx:id="typeCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="100.0" text="Created" fx:id="createdCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="100.0" text="Status" fx:id="statusCol" />
+        <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="155.0" text="Comment" fx:id="commentCol" />
+      </columns>
+    </TableView>
+    <Label layoutX="16.0" layoutY="14.0" text="Orders">
+      <font>
+        <Font size="25.0" />
+      </font>
+    </Label>
+    <Button id="btnAddProd" fx:id="btnAdd" layoutX="152.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleAdd" prefHeight="30.0" prefWidth="95.0" text="Add" />
+    <ComboBox fx:id="typeFilterCombo" layoutX="80.0" layoutY="87.0" onAction="#handleFilterByType">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="All types" />
+          <String fx:value="Sell" />
+          <String fx:value="Buy" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <Label layoutX="16.0" layoutY="90.0" text="Filter by" />
+  </children>
+</AnchorPane>

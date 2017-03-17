@@ -104,10 +104,12 @@ public class App extends Application{
 	public static Parent getView(String viewFile){
 		Parent activeElement = null;
 		try{
-			String viewPath = System.getProperty("user.dir") + "/src/net/vatri/inventory/views/";
+
+
+			String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
 			java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
-// System.out.println("file://" + viewPath + viewFile + ".fxml");
 			activeElement = FXMLLoader.load(viewRes);
+
 		} catch(Exception e){
 			System.out.println(e.getCause());
 			// System.out.println(e.printStackTrace());	

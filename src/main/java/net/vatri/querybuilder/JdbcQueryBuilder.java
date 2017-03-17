@@ -1,4 +1,4 @@
-package net.vatri.activerecord;
+package net.vatri.querybuilder;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -8,12 +8,12 @@ import java.util.HashMap;
 
 import java.sql.*;
 
-public class JdbcActiveRecord implements ActiveRecord{
+public class JdbcQueryBuilder implements QueryBuilder{
 	
 	/**
 	* SQL variable parts... 
 	*
-	*   (WARNING) Don't forget to clear all these params in _clearActiveRecord() !
+	*   (WARNING) Don't forget to clear all these params in _clearQueryBuilder() !
 	*
 	**/ 
 
@@ -41,11 +41,11 @@ public class JdbcActiveRecord implements ActiveRecord{
 	// Bug: one method can close connection while an another method still uses it...
 		// private Connection          connection;
 
-	public JdbcActiveRecord(String dbUrl){
+	public JdbcQueryBuilder(String dbUrl){
 		this.connectionUrl = dbUrl;
 	}
 
-	public JdbcActiveRecord select(String sel){
+	public JdbcQueryBuilder select(String sel){
 		_select = sel;
 		return this;
 	}
@@ -54,15 +54,15 @@ public class JdbcActiveRecord implements ActiveRecord{
 	* Append multiple filters before running the query. 
 	* To append "WHERE id = 1" we simply call ...where("id","1")
 	**/
-	public JdbcActiveRecord where(String fld, String val){
+	public JdbcQueryBuilder where(String fld, String val){
 		this._where.put(fld, val);
 		return this;
 	}
-	// public JdbcActiveRecord whereIn(String fld, String[] arr){
+	// public JdbcQueryBuilder whereIn(String fld, String[] arr){
 	// 	// this._where.put(fld, val);
 	// 	return this;
 	// }
-	// public JdbcActiveRecord whereNotIn(String fld, String[] arr){
+	// public JdbcQueryBuilder whereNotIn(String fld, String[] arr){
 	// 	// this._where.put(fld, val);
 	// 	return this;
 	// }
@@ -70,7 +70,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 	/**
 	* Set table to select from.
 	**/
-	public JdbcActiveRecord from(String tbl){
+	public JdbcQueryBuilder from(String tbl){
 		this._tbl = tbl;
 		return this;
 	}
@@ -78,7 +78,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 	/**
 	* Join tables
 	**/
-	public JdbcActiveRecord join(String[] join){
+	public JdbcQueryBuilder join(String[] join){
 		this._joins.add(join);
 		return this;
 	}
@@ -86,7 +86,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 	/**
 	* Set custom made query to be run
 	**/
-	public ActiveRecord query(String strQuery){
+	public QueryBuilder query(String strQuery){
 		this._query = strQuery;
 		return this;
 	}
@@ -120,12 +120,12 @@ public class JdbcActiveRecord implements ActiveRecord{
 			connection.close();
 
 		} catch(Exception e){ 
-			System.out.println("ActiveRecord.first() can't run query... " + finalSql );
+			System.out.println("QueryBuilder.first() can't run query... " + finalSql );
 			System.out.println(e.getMessage());
 			// e.printStackTrace();
 		}
 
-		_clearActiveRecord();
+		_clearQueryBuilder();
 
 		return output;
 	}
@@ -167,7 +167,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 			// e.printStackTrace();
 		}
 
-		_clearActiveRecord();
+		_clearQueryBuilder();
 
 		return output;
 	}
@@ -190,7 +190,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 			System.out.println(e.getMessage());
 		}
 
-		_clearActiveRecord();
+		_clearQueryBuilder();
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 			connection.close();
 
 		} catch(Exception e){
-			System.out.println("ActiveRecord.insert() can't run query: " + sqlInsert);
+			System.out.println("QueryBuilder.insert() can't run query: " + sqlInsert);
 			System.out.println(e.getMessage());
 			//e.printStackTrace();
 		}
@@ -301,7 +301,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 
 		// System.out.println("Running query "+strQuery);
 
-		_clearActiveRecord();
+		_clearQueryBuilder();
 
 		return output;
 	}
@@ -331,19 +331,19 @@ public class JdbcActiveRecord implements ActiveRecord{
 			return false;
 		}
 
-		_clearActiveRecord();
+		_clearQueryBuilder();
 
 		return true;
 	}
 
 
-	public ActiveRecord orderBy(String fld, String type){
+	public QueryBuilder orderBy(String fld, String type){
 		this._orderByField = fld;
 		this._orderByType = type;
 		return this;
 	}
 
-	public JdbcActiveRecord limit(int offset, int limit){
+	public QueryBuilder limit(int offset, int limit){
 		this._offset = offset;
 		this._limit  = limit;
 		return this;
@@ -421,7 +421,7 @@ public class JdbcActiveRecord implements ActiveRecord{
 		return strSqlWhere;
 	}
 
-	private void _clearActiveRecord(){
+	private void _clearQueryBuilder(){
 		this._where.clear();
 		this._tbl = "";
 		this._joins.clear();

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import java.util.Iterator;
 
-// import net.vatri.activerecord.*;
+ import net.vatri.querybuilder.*;
 
 public abstract class BaseModel{
 	
@@ -20,7 +20,7 @@ public abstract class BaseModel{
 	* Database access object. 
 	* Note that this can be changed with setDao()
 	**/
-	protected InventoryDao dao = new ActiveRecordDao();
+	protected InventoryDao dao = new QueryBuilderDao( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
 	public BaseModel(){ }
 

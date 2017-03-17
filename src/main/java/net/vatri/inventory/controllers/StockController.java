@@ -13,6 +13,9 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import net.vatri.querybuilder.*;
+
+
 public class StockController extends BaseController implements Initializable {
 
     @FXML private TableView<StockModel> tblStock;
@@ -24,7 +27,7 @@ public class StockController extends BaseController implements Initializable {
 
         ObservableList<StockModel> tblData = FXCollections.observableArrayList();
 
-        InventoryDao dao = new ActiveRecordDao();
+        InventoryDao dao = new QueryBuilderDao( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
         for (Map<String, String> row : dao.getStock()) {
             StockModel m = new StockModel(row.get("product_name"),row.get("variant_name"),row.get("stock"));

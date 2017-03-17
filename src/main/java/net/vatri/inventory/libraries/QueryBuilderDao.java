@@ -1,6 +1,6 @@
 package net.vatri.inventory;
 
-import net.vatri.activerecord.*;
+import net.vatri.querybuilder.*;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
-public class ActiveRecordDao implements InventoryDao{
+public class QueryBuilderDao implements InventoryDao{
 	
 	// Table name definitions:
 	private static final String TBL_PRODUCTS = "products";
@@ -28,20 +28,25 @@ public class ActiveRecordDao implements InventoryDao{
 	private static final String TBL_ORDER_ITEMS = "order_items";
 	// private static final String TBL_PURCHASES = "purchases";
 
-	private ActiveRecord db = new JdbcActiveRecord(App.getConfig("db_connection"));
+	// private QueryBuilder db = new JdbcQueryBuilder(App.getConfig("db_connection"));
+	private QueryBuilder db;
+
+	public QueryBuilderDao(QueryBuilder db){
+		this.db = db;
+	}
 
 	/**
 	* Setting active record object used for accessing database
 	**/
-	public void setActiveRecord(ActiveRecord newDb){
+	public void setQueryBuilder(QueryBuilder newDb){
 		this.db = newDb;
 	}
-	public ActiveRecord getActiveRecord(){
+	public QueryBuilder getQueryBuilder(){
 		return this.db;
 	}
 
 	public Map<String,String> getUserByEmail(String email){
-		return getActiveRecord().where("email", email)
+		return getQueryBuilder().where("email", email)
 			.from(TBL_USERS)
 			.first();
 	}
@@ -53,19 +58,19 @@ public class ActiveRecordDao implements InventoryDao{
             + " LEFT JOIN " + TBL_PRODUCT_GROUPS + " pg ON pg.id = p.group_id "
             + " ORDER BY p.id DESC ";
 
-        return getActiveRecord().query(strQuery).result();
+        return getQueryBuilder().query(strQuery).result();
 	}
 
 	// Get product row by ID
 	public Map<String,String> getProduct(String id){
-		return getActiveRecord().where("id", id).from(TBL_PRODUCTS).first();
+		return getQueryBuilder().where("id", id).from(TBL_PRODUCTS).first();
 	}
 
 	// Save product object to database. Initialy called from Model.save()...
 	public boolean saveProduct(ProductModel product){
 
 		if("".equals(product.getName())){
-			System.out.println("ActiveRecordDao.saveProduct() - Product name is required!");
+			System.out.println("QueryBuilderDao.saveProduct() - Product name is required!");
 			return false;
 		}
 
@@ -75,18 +80,18 @@ public class ActiveRecordDao implements InventoryDao{
 		data.put("group_id", product.getGroup());
 
 		if("0".equals(product.getId())){
-			// getActiveRecord().insert(TBL_PRODUCTS, data);
+			// getQueryBuilder().insert(TBL_PRODUCTS, data);
 			// System.out.println("Inserting product");
-			String insertedId = getActiveRecord().insert(TBL_PRODUCTS, data);
+			String insertedId = getQueryBuilder().insert(TBL_PRODUCTS, data);
 		} else {
-			getActiveRecord().where("id", product.getId()).update(TBL_PRODUCTS, data);
+			getQueryBuilder().where("id", product.getId()).update(TBL_PRODUCTS, data);
 		}
 		return true;
 	}
 
 	// Todo: offset + limit
 	public List<Map<String,String>> getGroups(){
-		return getActiveRecord().orderBy("id", "DESC")
+		return getQueryBuilder().orderBy("id", "DESC")
             .from(TBL_PRODUCT_GROUPS)
             .result();
 	}
@@ -102,8 +107,8 @@ public class ActiveRecordDao implements InventoryDao{
 				+ " WHERE `g`.id = " + id
 				+ " LIMIT 1";
 // System.out.println(strQuery);
-		// Map<String,String> row = getActiveRecord().where("id", id).from(TBL_PRODUCT_GROUPS).first();
-		return getActiveRecord().query(strQuery).first();
+		// Map<String,String> row = getQueryBuilder().where("id", id).from(TBL_PRODUCT_GROUPS).first();
+		return getQueryBuilder().query(strQuery).first();
 	}
 
 	/**
@@ -115,7 +120,7 @@ public class ActiveRecordDao implements InventoryDao{
 	public boolean saveGroup(ProductGroupModel group){
 
 		if("".equals(group.getName())){
-			System.out.println("ActiveRecordDao.saveProduct() - Product name is required!");
+			System.out.println("QueryBuilderDao.saveProduct() - Product name is required!");
 			return false;
 		}
 
@@ -124,10 +129,10 @@ public class ActiveRecordDao implements InventoryDao{
 		data.put("price", group.getPrice());
 
 		if("0".equals(group.getId())){
-			String insertedId = getActiveRecord().insert(TBL_PRODUCT_GROUPS, data);
+			String insertedId = getQueryBuilder().insert(TBL_PRODUCT_GROUPS, data);
 			group.setId(insertedId);
 		} else {
-			getActiveRecord().where("id", group.getId()).update(TBL_PRODUCT_GROUPS, data);
+			getQueryBuilder().where("id", group.getId()).update(TBL_PRODUCT_GROUPS, data);
 		}
 
 		// group.saveVariants();
@@ -165,7 +170,7 @@ public class ActiveRecordDao implements InventoryDao{
                 /* Skip deletion of used variants: */
                 + " AND id NOT IN ( " + _getUsedVariantsByGroupId(groupId) + " )";
 
-        getActiveRecord().query(sqlDeleteUnNeeded).executeQuery(); 
+        getQueryBuilder().query(sqlDeleteUnNeeded).executeQuery(); 
 
         /* Do filter to make sure we insert only new variants */
         _removeExistingVariants(newVariantsArray, groupId);
@@ -182,7 +187,7 @@ public class ActiveRecordDao implements InventoryDao{
             row.put("group_id", groupId);
             row.put("variant_name", variant);
 
-            getActiveRecord().insert(TBL_PRODUCT_GROUP_VARIANTS,row);
+            getQueryBuilder().insert(TBL_PRODUCT_GROUP_VARIANTS,row);
 // System.out.println("Inserted variant: "+variant);
         }
         return true;
@@ -205,7 +210,7 @@ public class ActiveRecordDao implements InventoryDao{
 	                    	+ " WHERE product_variant_id NOT NULL "
                 + " ) ";
         
-        List<Map<String,String>> res = getActiveRecord().query(strQuery).result();
+        List<Map<String,String>> res = getQueryBuilder().query(strQuery).result();
 
         for(Map<String,String> row : res){
             // System.out.println(row);
@@ -227,7 +232,7 @@ public class ActiveRecordDao implements InventoryDao{
     private void _removeExistingVariants(String[] newVariants, String groupId){
 
         /* First, let's make an String[] array of existing variants */
-        List<Map<String,String>> existingVariants = getActiveRecord().where("group_id", groupId)
+        List<Map<String,String>> existingVariants = getQueryBuilder().where("group_id", groupId)
             .from("group_variants")
             .result();
         
@@ -258,7 +263,7 @@ public class ActiveRecordDao implements InventoryDao{
 
 	// Todo: offset + limit
 	public List<Map<String,String>> getOrders(){
-		return getActiveRecord().orderBy("id", "DESC")
+		return getQueryBuilder().orderBy("id", "DESC")
             .from(TBL_ORDERS)
             .result();
 	}
@@ -268,7 +273,7 @@ public class ActiveRecordDao implements InventoryDao{
 	**/
 	public List<Map<String,String>> getOrders(Map<String,String> params){
 
-		ActiveRecord db = getActiveRecord();
+		QueryBuilder db = getQueryBuilder();
 
 		db.orderBy("id", "DESC");
 
@@ -292,8 +297,8 @@ public class ActiveRecordDao implements InventoryDao{
 
 		String strQuery = "SELECT * FROM " + TBL_ORDERS + " where id = " + id
 				+ " LIMIT 1";
-		// Map<String,String> row = getActiveRecord().where("id", id).from(TBL_PRODUCT_GROUPS).first();
-		return getActiveRecord().query(strQuery).first();
+		// Map<String,String> row = getQueryBuilder().where("id", id).from(TBL_PRODUCT_GROUPS).first();
+		return getQueryBuilder().query(strQuery).first();
 	}
 
 	/**
@@ -320,10 +325,10 @@ public class ActiveRecordDao implements InventoryDao{
 		data.put("comment", order.getComment());
 
 		if(Integer.parseInt(order.getId() ) < 1){
-			String insertedId = getActiveRecord().insert(TBL_ORDERS, data);
+			String insertedId = getQueryBuilder().insert(TBL_ORDERS, data);
 			order.setId(insertedId);
 		} else {
-			getActiveRecord().where("id", order.getId()).update(TBL_ORDERS, data);
+			getQueryBuilder().where("id", order.getId()).update(TBL_ORDERS, data);
 		}
 
 		return _saveOrderItems(order);
@@ -337,7 +342,7 @@ public class ActiveRecordDao implements InventoryDao{
 			return false;
 		}
 
-		getActiveRecord().query("DELETE FROM " + TBL_ORDER_ITEMS + " WHERE order_id = " + order.getId());
+		getQueryBuilder().query("DELETE FROM " + TBL_ORDER_ITEMS + " WHERE order_id = " + order.getId());
 
 		for(OrderItem item : order.getItems()){
 //System.out.println(item.getProduct());
@@ -352,13 +357,13 @@ public class ActiveRecordDao implements InventoryDao{
 			rowData.put("price", item.getPriceValue());
 // System.out.println("row data:");
 // System.out.println(rowData);
-			getActiveRecord().insert(TBL_ORDER_ITEMS, rowData);
+			getQueryBuilder().insert(TBL_ORDER_ITEMS, rowData);
 		}
 		return true;
 	}
 
 	public ObservableList<OrderItem> getOrderItems(String orderId){
-		List<Map<String,String>> result = getActiveRecord()
+		List<Map<String,String>> result = getQueryBuilder()
 			.where("order_id", orderId)
 			.from(TBL_ORDER_ITEMS)
 			.result();
@@ -391,13 +396,13 @@ public class ActiveRecordDao implements InventoryDao{
 			+ "FROM " + TBL_PRODUCT_GROUP_VARIANTS + " v "
 			+ " WHERE v.group_id = " + groupId;
 
-		return getActiveRecord().query(strQuery).result();
+		return getQueryBuilder().query(strQuery).result();
 	}
 	public List<Map<String,String>> getVariants(){
 		return null;//todo
 	}
 	public Map<String,String> getVariant(String id){
-		return getActiveRecord().where("id", id).from(TBL_PRODUCT_GROUP_VARIANTS).first();
+		return getQueryBuilder().where("id", id).from(TBL_PRODUCT_GROUP_VARIANTS).first();
 	}
 	public boolean saveVariant(GroupVariantModel variant){
 		return true;//todo
@@ -429,7 +434,7 @@ public class ActiveRecordDao implements InventoryDao{
 			+ " LEFT JOIN group_variants gv ON gv.group_id = p.group_id "
 			+ " ORDER BY product_name ";
 //System.out.println(strQuery);
-		return getActiveRecord().query(strQuery).result();
+		return getQueryBuilder().query(strQuery).result();
 	}
 
 	public Map<String,String> getStats(){
@@ -450,7 +455,7 @@ public class ActiveRecordDao implements InventoryDao{
 				+ " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month3+"%' ) as orders3"
 				+ " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month4+"%' ) as orders4"
 		;
-		return getActiveRecord().query(strQuery).first();
+		return getQueryBuilder().query(strQuery).first();
 	}
 
 

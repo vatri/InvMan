@@ -16,9 +16,11 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import net.vatri.querybuilder.*;
+
 public class DashboardController extends BaseController implements Initializable {
 
-    private InventoryDao dao = new ActiveRecordDao();
+    private InventoryDao dao = new QueryBuilderDao( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
     @FXML private Label   productsNumber;
     @FXML private Label   groupsNumber;

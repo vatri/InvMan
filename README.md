@@ -2,6 +2,14 @@
 Simple JavaFX inventory management application
 
 ## INSTALL
+
+### REQUIREMENTS
+
+- Maven
+- Java 1.8 (not tested in older versions yet)
+
+### Console commands
+
 ```
 git clone [this repo URL]
 cd [cloned-dir]

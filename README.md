@@ -8,7 +8,7 @@ Simple JavaFX inventory management application
 - Maven
 - Java 1.8 (not tested in older versions yet)
 
-### Console commands
+### DOWNLOAD, COMPILE AND RUN (using Maven)
 
 ```
 git clone [this repo URL]
@@ -16,7 +16,7 @@ cd [cloned-dir]
 mvn compile
 mvn exec:java -Dexec.mainClass="net.vatri.inventory.App"
 ```
-### Login credentials
+### LOGIN
 
 The credentials for login are defined in users table in the SQL file placed in the root directory.
 By default use following:

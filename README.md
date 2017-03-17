@@ -10,7 +10,7 @@ mvn exec:java -Dexec.mainClass="net.vatri.inventory.App"
 ```
 ### Login credentials
 
-The credentials for logging in are defined in users table in SQL file (see root directory).
+The credentials for login are defined in users table in the SQL file placed in the root directory.
 By default use following:
 
 ```

@@ -17,6 +17,21 @@
                 <target>1.8</target>
             </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>java</goal>
+                  </goals>
+              </execution>
+          </executions>
+          <configuration>
+              <mainClass>net.vatri.inventory.App</mainClass>
+          </configuration>
+        </plugin>
     </plugins>
   </build>
 

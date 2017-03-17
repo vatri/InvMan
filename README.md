@@ -29,12 +29,15 @@ pass: b
 
 ### PHASE 1
 
-- Basic dashboard
-- Product management
-- Product group management
-- Orders management
-- Stock list
+[x] Basic dashboard
+[x] Product management
+[x] Product group management
+[x] Orders management
+[x] Stock list
 
 ### PHASE 2
 
-[todo]
+[ ] Unit tests
+[ ] Use Hibernate ORM
+[ ] Speed improvement
+[ ] ???

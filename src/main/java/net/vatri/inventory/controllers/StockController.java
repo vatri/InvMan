@@ -27,7 +27,7 @@ public class StockController extends BaseController implements Initializable {
 
         ObservableList<StockModel> tblData = FXCollections.observableArrayList();
 
-        InventoryDao dao = new QueryBuilderDao( new JdbcQueryBuilder(App.getConfig("db_connection")) );
+        InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
         for (Map<String, String> row : dao.getStock()) {
             StockModel m = new StockModel(row.get("product_name"),row.get("variant_name"),row.get("stock"));

@@ -16,7 +16,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
-public class QueryBuilderDao implements InventoryDao{
+public class InventoryDaoImpl implements InventoryDao{
 	
 	// Table name definitions:
 	private static final String TBL_PRODUCTS = "products";
@@ -31,7 +31,7 @@ public class QueryBuilderDao implements InventoryDao{
 	// private QueryBuilder db = new JdbcQueryBuilder(App.getConfig("db_connection"));
 	private QueryBuilder db;
 
-	public QueryBuilderDao(QueryBuilder db){
+	public InventoryDaoImpl(QueryBuilder db){
 		this.db = db;
 	}
 
@@ -70,7 +70,7 @@ public class QueryBuilderDao implements InventoryDao{
 	public boolean saveProduct(ProductModel product){
 
 		if("".equals(product.getName())){
-			System.out.println("QueryBuilderDao.saveProduct() - Product name is required!");
+			System.out.println("dao.saveProduct() - Product name is required!");
 			return false;
 		}
 
@@ -120,7 +120,7 @@ public class QueryBuilderDao implements InventoryDao{
 	public boolean saveGroup(ProductGroupModel group){
 
 		if("".equals(group.getName())){
-			System.out.println("QueryBuilderDao.saveProduct() - Product name is required!");
+			System.out.println("dao.saveProduct() - Product name is required!");
 			return false;
 		}
 

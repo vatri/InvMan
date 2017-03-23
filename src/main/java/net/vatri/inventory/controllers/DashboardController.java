@@ -20,7 +20,7 @@ import net.vatri.querybuilder.*;
 
 public class DashboardController extends BaseController implements Initializable {
 
-    private InventoryDao dao = new QueryBuilderDao( new JdbcQueryBuilder(App.getConfig("db_connection")) );
+    private InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
     @FXML private Label   productsNumber;
     @FXML private Label   groupsNumber;

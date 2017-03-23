@@ -20,7 +20,7 @@ public abstract class BaseModel{
 	* Database access object. 
 	* Note that this can be changed with setDao()
 	**/
-	protected InventoryDao dao = new QueryBuilderDao( new JdbcQueryBuilder(App.getConfig("db_connection")) );
+	protected InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
 	public BaseModel(){ }
 

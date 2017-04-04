@@ -4,6 +4,7 @@ import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.scene.control.TableColumn;
 
@@ -25,40 +26,55 @@ import java.util.Map;
 
 // import javafx.event.*;
 import javafx.scene.input.MouseEvent;
+import net.vatri.inventory.models.Product;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+import org.hibernate.service.ServiceRegistry;
 
 public class ProductsController extends BaseController implements Initializable {
 
-    @FXML private TableView<ProductModel> tblProducts;
-    @FXML private TableColumn<ProductModel, String> idCol;
-    @FXML private TableColumn<ProductModel, String> productCol;
-    @FXML private TableColumn<ProductModel, String> groupCol;
-    @FXML private TableColumn<ProductModel, String> priceCol;
+    @FXML private TableView<Product> tblProducts;
+    @FXML private TableColumn<Product, String> idCol;
+    @FXML private TableColumn<Product, String> productCol;
+    @FXML private TableColumn<Product, String> groupCol;
+    @FXML private TableColumn<Product, String> priceCol;
 
     @FXML private Button btnAddProd;
 
     // @FXML private TextField fldName;
     // @FXML private TextField fldPrice;
-    
 
 	public void initialize(URL url, ResourceBundle rb){
 
-		// Generate products table rows...
-		ObservableList<ProductModel> tblData = FXCollections.observableArrayList();
-		ProductModel productModel = new ProductModel();
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+//		TODO, use following:????
+//		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+//				.configure() // configures settings from hibernate.cfg.xml
+//				.build();
+//		try {
+//			sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+//		} catch (Exception e) {
+//			// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+//			// so destroy it manually.
+//			StandardServiceRegistryBuilder.destroy( registry );
+//			System.out.println(e.getMessage());
+//		}
 
-		for(Map<String,String> prod : productModel.all()){
-// System.out.println("Url="+url);
-			ProductModel tmpModel = new ProductModel(
-				prod.get("id"),
-				prod.get("name"),
-				prod.get("price")
-			);
-			tmpModel.setGroup(prod.get("group_name"), prod.get("group_price"));
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
 
-			// tmpModel.setGroup("Group...");
+		ObservableList<Product> tblData = FXCollections.observableArrayList(
+				session.createQuery("from Product").list()
+		);
 
-			tblData.add(tmpModel);
-		}
+		session.getTransaction().commit();
+		session.close();
+
 
 		idCol.setCellValueFactory( new PropertyValueFactory<>("id"));
 		productCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -76,7 +92,7 @@ public class ProductsController extends BaseController implements Initializable 
 
 	@FXML protected void openProduct(){
 
-		ProductModel prod = tblProducts.getSelectionModel().getSelectedItem();
+		Product prod = tblProducts.getSelectionModel().getSelectedItem();
 		App.getInstance().repository.put("selectedProductId", prod.getId());
 		App.showPage("newProduct");
 	}

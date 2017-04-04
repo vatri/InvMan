@@ -25,6 +25,14 @@ By default use following:
 username: b
 pass: b
 ```
+
+## CHANGELOG
+
+### 1.2.1 
+
+- Added Hibernate ORM
+
+
 ## ROADMAP
 
 ### PHASE 1

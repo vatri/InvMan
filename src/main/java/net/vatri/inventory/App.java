@@ -1,17 +1,18 @@
 package net.vatri.inventory;
 
-//import net.vatri.inventory.controllers.*;
-
 import java.util.Map;
 import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-// import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class App extends Application{
 
@@ -33,6 +34,11 @@ public class App extends Application{
     * Variable for the singleton pattern... 
 	**/
 	private static App instance = null;
+
+	/**
+	* Hibernate session factory (singleton)
+	**/
+	private static SessionFactory sessionFactory = null;
 
 	@Override
 	public void start(Stage primaryStage){
@@ -130,6 +136,24 @@ public class App extends Application{
 			instance = new App();
 		}
 		return instance;
+	}
+
+	public static SessionFactory getSessionFactory(){
+		if( sessionFactory == null ){
+//			sessionFactory = new Configuration().configure().buildSessionFactory();
+			final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+					.configure() // configures settings from hibernate.cfg.xml
+					.build();
+			try {
+				sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+			} catch (Exception e) {
+				// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+				// so destroy it manually.
+				StandardServiceRegistryBuilder.destroy( registry );
+				System.out.println(e.getMessage());
+			}
+		}
+		return sessionFactory;
 	}
 
 	public static void main(String[] args){

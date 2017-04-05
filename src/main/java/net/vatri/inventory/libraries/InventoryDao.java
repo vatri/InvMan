@@ -1,37 +1,36 @@
-package net.vatri.inventory;
+package net.vatri.inventory.libraries;
+import net.vatri.inventory.models.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import javafx.collections.ObservableList;
 
 public interface InventoryDao{
 
-	public Map<String,String> getUserByEmail(String email);
+    public User getUserByEmail(String email);
 
-	// todo: offset?!
-	public List<Map<String,String>> getProducts();
-	public Map<String,String> getProduct(String id);
-	public boolean saveProduct(ProductModel productModel);
+    // todo: offset?!
+    public List<Product> getProducts();
+    public Product getProduct(String id);
+    public boolean saveProduct(Product product);
 
-	// Todo: offset + limit
-	public List<Map<String,String>> getGroups();
-	public Map<String,String> getGroup(String id);
-	public boolean saveGroup(ProductGroupModel groupModel);
+    // Todo: offset + limit
+    public List<ProductGroup> getGroups();
+    public ProductGroup getGroup(String id);
+    public boolean saveGroup(ProductGroup group);
 
-	public List<Map<String,String>> getOrders();
-	public List<Map<String,String>> getOrders(Map<String,String> params);
-	public Map<String,String> getOrder(String id);
-	public boolean saveOrder(OrderModel orderModel);
-	public ObservableList<OrderItem> getOrderItems(String orderId);
+    public List<Order> getOrders();
+    public List<Order> getOrders(Map<String,String> params);
+    public Order getOrder(String id);
+    public boolean saveOrder(Order order);
+    public List<OrderItem> getOrderItems(String orderId);
 
-	public List<Map<String,String>> getVariantsByGroup(String groupId);
-	public List<Map<String,String>> getVariants();
-	public Map<String,String> getVariant(String id);
-	public boolean saveVariant(GroupVariantModel variant);
+    public List<GroupVariant> getVariantsByGroup(String groupId);
+    public List<GroupVariant> getVariants();
+    public GroupVariant getVariant(String id);
+    public boolean saveVariant(GroupVariant variant);
 
-	public List<Map<String,String>> getStock();
+    public List<Map<String,String>> getStock();
 
-	public Map<String,String> getStats();
+    public Map<String,String> getStats();
 
 }

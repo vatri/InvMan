@@ -1,47 +1,61 @@
-package net.vatri.inventory;
+package net.vatri.inventory.models;
 
-import javafx.scene.control.TextField;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="order_items")
+public class OrderItem {
 
-public class OrderItem{
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-	private ProductModel product;
-	private GroupVariantModel variant;
-	private TextField price;
+    private Order order;
+    private Product product;
+    private GroupVariant groupVariant;
 
-	public OrderItem(ProductModel product, GroupVariantModel variant){
-		this.product = product;
-		this.variant = variant;
-		this.setPrice( product.getPrice() );
-	}
+    private String price;
 
-	public OrderItem(ProductModel product, GroupVariantModel variant, String price){
-		this(product,variant);//calls another constructor
-		this.setPrice( price );
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public String getProductName(){
-		return product.toString();
-	}
-	public ProductModel getProduct(){
-		return product;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getVariantName(){
-		return variant != null ? variant.toString() : "-";
-	}
-	public GroupVariantModel getVariant(){
-		return variant;
-	}
+    public Order getOrder() {
+        return order;
+    }
 
-	public TextField getPrice(){
-		return price;
-	}
-	public void setPrice(String price){
-		this.price = new TextField( price );
-	}
-	public String getPriceValue(){
-		return price.getText();
-	}
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public GroupVariant getGroupVariant() {
+        return groupVariant;
+    }
+
+    public void setGroupVariant(GroupVariant groupVariant) {
+        this.groupVariant = groupVariant;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 }

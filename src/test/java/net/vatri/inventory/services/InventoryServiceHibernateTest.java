@@ -3,6 +3,7 @@ package net.vatri.inventory.services;
 import junit.framework.TestCase;
 import net.vatri.inventory.models.GroupVariant;
 import net.vatri.inventory.models.ProductGroup;
+import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,8 @@ public class InventoryServiceHibernateTest extends TestCase {
 
     @Override
     public void setUp(){
-        inventoryService = new InventoryServiceHibernate();
+        SessionFactory sessionFactory = new FakeSessionFactory();
+        inventoryService = new InventoryServiceHibernate(sessionFactory);
     }
 
     // This is required so after saving of this object, we can take ID and save variants for example:

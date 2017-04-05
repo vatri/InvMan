@@ -1,11 +1,28 @@
 package net.vatri.inventory.services;
 
+import net.vatri.inventory.App;
 import net.vatri.inventory.models.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 import java.util.Map;
 
 public class InventoryServiceHibernate implements InventoryService {
+
+    private SessionFactory sessionFactory;
+
+    public InventoryServiceHibernate(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public User getUserByEmail(String email) {
@@ -39,7 +56,16 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public boolean saveGroup(ProductGroup group) {
-        return false;
+        Session session = getSessionFactory().openSession();
+
+        if(group.getId() > 0){
+            session.save(group);
+            group.setId(todo);
+        } else {
+            session.update(group);
+        }
+
+        session.close();
     }
 
 

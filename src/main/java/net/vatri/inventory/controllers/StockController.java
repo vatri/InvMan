@@ -1,4 +1,5 @@
 package net.vatri.inventory.controllers;
+import net.vatri.inventory.StockModel;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,15 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import javafx.scene.control.cell.PropertyValueFactory;
-
-import net.vatri.querybuilder.*;
-
 
 public class StockController extends BaseController implements Initializable {
 
@@ -27,9 +24,7 @@ public class StockController extends BaseController implements Initializable {
 
         ObservableList<StockModel> tblData = FXCollections.observableArrayList();
 
-        InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
-
-        for (Map<String, String> row : dao.getStock()) {
+        for (Map<String, String> row : inventoryService.getStock()) {
             StockModel m = new StockModel(row.get("product_name"),row.get("variant_name"),row.get("stock"));
             tblData.add(m);
         }

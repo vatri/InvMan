@@ -1,6 +1,7 @@
 package net.vatri.inventory.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="orders")
@@ -18,6 +19,9 @@ public class Order {
     private String totalPrice;
     private String type;
     private String created;//Todo - Date type...
+
+    @OneToMany
+    private List<OrderItem> items;
 
     public Integer getId() {
         return id;
@@ -97,5 +101,13 @@ public class Order {
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
     }
 }

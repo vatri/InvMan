@@ -17,17 +17,21 @@ public interface InventoryService{
     public List<ProductGroup> getGroups();
     public ProductGroup getGroup(String id);
     public boolean saveGroup(ProductGroup group);
+    public String getGroupVariantsAsString(ProductGroup group);
+
+    public List<GroupVariant> getVariantsByGroup(String groupId);
+    public List<GroupVariant> getVariants();
+    public GroupVariant getVariant(String id);
+    public boolean saveVariant(GroupVariant variant);
+    public boolean saveGroupVariants(ProductGroup group, String text);
+
+
 
     public List<Order> getOrders();
     public List<Order> getOrders(Map<String,String> params);
     public Order getOrder(String id);
     public boolean saveOrder(Order order);
     public List<OrderItem> getOrderItems(String orderId);
-
-    public List<GroupVariant> getVariantsByGroup(String groupId);
-    public List<GroupVariant> getVariants();
-    public GroupVariant getVariant(String id);
-    public boolean saveVariant(GroupVariant variant);
 
     public List<Map<String,String>> getStock();
 

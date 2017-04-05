@@ -1,6 +1,8 @@
 package net.vatri.inventory.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="product_groups")
@@ -13,6 +15,19 @@ public class ProductGroup {
     private String groupName;
     private String price;
     private String created;//Todo - Date type...
+    private List<GroupVariant> groupVariants;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productGroup")
+    public List<GroupVariant> getGroupVariants() {
+        return groupVariants;
+    }
+
+    public void setGroupVariants(List<GroupVariant> groupVariants) {
+        this.groupVariants = groupVariants;
+    }
+
+
+
 
     public Integer getId() {
         return id;

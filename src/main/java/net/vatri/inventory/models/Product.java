@@ -56,7 +56,4 @@ public class Product {
         this.group = group;
     }
 
-    public void setGroup_id(Integer group_id) {
-        this.group_id = group_id;
-    }
 }

@@ -1,9 +1,6 @@
 package net.vatri.inventory.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="order_items")
@@ -12,12 +9,12 @@ public class OrderItem {
     @Id
     @GeneratedValue
     private Integer id;
-
+    @ManyToOne
     private Order order;
     private Product product;
     private GroupVariant groupVariant;
-
     private String price;
+
 
     public Integer getId() {
         return id;

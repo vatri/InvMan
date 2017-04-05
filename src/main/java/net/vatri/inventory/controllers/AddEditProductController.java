@@ -2,16 +2,10 @@ package net.vatri.inventory.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.scene.control.TableColumn;
 
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
@@ -22,9 +16,6 @@ import javafx.collections.FXCollections;
 import net.vatri.inventory.App;
 import net.vatri.inventory.models.Product;
 import net.vatri.inventory.models.ProductGroup;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddEditProductController extends BaseController implements Initializable{
 
@@ -39,7 +30,7 @@ public class AddEditProductController extends BaseController implements Initiali
 
 	public void initialize(URL url, ResourceBundle rb){
 
-		_fillGroupComboData("0");
+		_fillGroupComboData( inventoryService.getProduct(_productId).getGroup() );
 		
 		if(_productId != null){
 			_loadProductData(_productId);	
@@ -98,7 +89,6 @@ public class AddEditProductController extends BaseController implements Initiali
 
 			boolean isProductSaved = inventoryService.saveProduct(model);
 
-			// model.setData(insertData);
 			if(isProductSaved){
 				errorLabel.setText("ERROR: can't save your form. Please contact IT support team!");
 				return false;

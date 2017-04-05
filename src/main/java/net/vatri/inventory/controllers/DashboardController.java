@@ -20,7 +20,7 @@ import net.vatri.querybuilder.*;
 
 public class DashboardController extends BaseController implements Initializable {
 
-    private InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
+//    private InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
     @FXML private Label   productsNumber;
     @FXML private Label   groupsNumber;
@@ -30,7 +30,7 @@ public class DashboardController extends BaseController implements Initializable
     @FXML private CategoryAxis  x;
     @FXML private NumberAxis    y;
 
-    private Map<String,String> stats = dao.getStats();
+    private Map<String,String> stats = inventoryService.getStats();
 
     public void initialize(URL url, ResourceBundle rb) {
 

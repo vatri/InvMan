@@ -7,25 +7,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.TableColumn;
 
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
-// import javafx.scene.control.ListView;
-
 import javafx.scene.control.ComboBox;
-// import javafx.collections.ObservableList;
-// import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import net.vatri.inventory.App;
+import net.vatri.inventory.models.*;
 
 public class AddEditOrderController extends BaseController implements Initializable{
 
@@ -41,17 +32,13 @@ public class AddEditOrderController extends BaseController implements Initializa
     @FXML private ComboBox<String> comboStatus;
     @FXML private ComboBox<String> comboType;
 
-    @FXML private ComboBox<ProductModel> comboProducts;
-    @FXML private ComboBox<GroupVariantModel> comboVariants;
-
+    @FXML private ComboBox<Product> comboProducts;
+    @FXML private ComboBox<GroupVariant> comboVariants;
 
     @FXML private TableView<OrderItem> tblItems;
-    @FXML private TableColumn<OrderItem, ProductModel> colProduct;
-    @FXML private TableColumn<OrderItem, ProductGroupModel> colVariant;
+    @FXML private TableColumn<OrderItem, Product> colProduct;
+    @FXML private TableColumn<OrderItem, ProductGroup> colVariant;
     @FXML private TableColumn<OrderItem, TextField> colPrice;
-
-	// @FXML private ListView<ProductModel> listAvailableProducts;
-	// @FXML private ListView<ProductModel> listAddedProducts;
 
     @FXML private Label errorLabel;
     @FXML private Label savedLabel;
@@ -77,7 +64,8 @@ public class AddEditOrderController extends BaseController implements Initializa
 	}
 
 	private void _loadOrderData(String orderId){
-		OrderModel order = new OrderModel(orderId);
+
+		Order order = inventoryService.getOrder(orderId);
 
 		fldName.setText( order.getName());
 		fldCity.setText( order.getCity());
@@ -91,40 +79,33 @@ public class AddEditOrderController extends BaseController implements Initializa
 
 		comboType.getSelectionModel().select(selectedType);
 
-		// fldZip.setText( order.getName());
 		tblItems.getItems().addAll( order.getItems() );
 
 	}
 
 	private void _fillAllProductsCombo(){
-		for( Map<String,String> row : new ProductModel().all() ){
-			comboProducts.getItems().add(
-				new ProductModel(row.get("id"))
-			);
-		}
+		comboProducts.getItems().addAll(
+				inventoryService.getProducts()
+		);
 	}
 
-	private void _fillVariantsCombo(ProductModel product){
+	private void _fillVariantsCombo(Product product){
 
-		ProductGroupModel group = new ProductGroupModel(product.getGroup());
+		ProductGroup group = product.getGroup();
  		comboVariants.getItems().clear();
-
-		List<GroupVariantModel> variants = group.getVariantModels();
-		if(variants != null){
-			for(GroupVariantModel v : variants){
-				comboVariants.getItems().add(v);
-			}
-		}
+		comboVariants.getItems().addAll(
+				group.getGroupVariants()
+		);
 		comboVariants.getSelectionModel().selectFirst();
 	}
 
 	// Fired when product in the combo is selected:
 	@FXML private void productSelected(){
-		if( comboProducts.getSelectionModel().getSelectedItem() instanceof ProductModel != true){
+		if( comboProducts.getSelectionModel().getSelectedItem() != null){
 			System.out.println("Value in product combo is not ProductModel");
 			return ;
 		}
-		ProductModel selectedProduct = comboProducts.getSelectionModel().getSelectedItem();
+		Product selectedProduct = comboProducts.getSelectionModel().getSelectedItem();
 		_fillVariantsCombo(selectedProduct);
 	}
 
@@ -132,26 +113,28 @@ public class AddEditOrderController extends BaseController implements Initializa
 	@FXML private void addProduct(){
 
 		// If no product is selected, just skip this action
-		if( comboProducts.getSelectionModel().getSelectedItem() instanceof ProductModel != true){
+		if( comboProducts.getSelectionModel().getSelectedItem() != null){
 			System.out.println("Value in product combo is not ProductModel");
 			return ;
 		}
 
-		ProductModel product      = comboProducts.getSelectionModel().getSelectedItem();
-		GroupVariantModel variant = comboVariants.getSelectionModel().getSelectedItem();
+		Product product      = comboProducts.getSelectionModel().getSelectedItem();
+		GroupVariant variant = comboVariants.getSelectionModel().getSelectedItem();
 
-		if( product instanceof ProductModel){
-			tblItems.getItems().add(
-		        new OrderItem(product, variant)
-			);
-			// Selects String "select product..." (reset combo)
+		if( product != null){
+		    OrderItem item = new OrderItem();
+
+            item.setProduct(product);
+            item.setGroupVariant(variant);
+
+			tblItems.getItems().add(item);
 			comboProducts.getSelectionModel().selectFirst();
 		}
 	}
 
 	@FXML protected boolean save(ActionEvent event){
 
-		OrderModel order = new OrderModel();
+		Order order = new Order();
 
 		order.setName(fldName.getText());
 		order.setType( comboType.getSelectionModel().getSelectedItem().toLowerCase() );
@@ -163,10 +146,10 @@ public class AddEditOrderController extends BaseController implements Initializa
 		order.setItems(tblItems.getItems());
 
 		if(_orderId != null){
-			order.setId(_orderId);
+			order.setId( Integer.parseInt(_orderId));
 		}
 
-		if(order.save()){
+		if( inventoryService.saveOrder(order) ){
 			App.showPage("orders");
 		} else {
 			System.out.println("Can't save order!");

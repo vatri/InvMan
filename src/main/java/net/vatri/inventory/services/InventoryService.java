@@ -1,10 +1,10 @@
-package net.vatri.inventory.libraries;
+package net.vatri.inventory.services;
 import net.vatri.inventory.models.*;
 
 import java.util.List;
 import java.util.Map;
 
-public interface InventoryDao{
+public interface InventoryService{
 
     public User getUserByEmail(String email);
 

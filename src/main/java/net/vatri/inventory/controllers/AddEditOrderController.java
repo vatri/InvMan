@@ -1,4 +1,4 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;

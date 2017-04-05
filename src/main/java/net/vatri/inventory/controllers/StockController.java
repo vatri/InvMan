@@ -1,4 +1,4 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

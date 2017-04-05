@@ -1,4 +1,4 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import net.vatri.inventory.App;
 import net.vatri.inventory.models.Product;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

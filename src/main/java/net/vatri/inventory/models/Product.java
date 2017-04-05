@@ -6,15 +6,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="products")
-public class Product{
+@Table(name = "products")
+public class Product {
 
     @Id
-	private String id;
+    private String id;
     private String name;
     private String created;
     private String price;
-    private Integer group_id;//TODO: use one to many
+    private ProductGroup group;
 
     public String getId() {
         return id;
@@ -48,8 +48,12 @@ public class Product{
         this.price = price;
     }
 
-    public Integer getGroup_id() {
-        return group_id;
+    public ProductGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(ProductGroup group) {
+        this.group = group;
     }
 
     public void setGroup_id(Integer group_id) {

@@ -1,4 +1,6 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
+
+import net.vatri.inventory.App;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

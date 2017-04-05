@@ -1,4 +1,6 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
+
+import net.vatri.inventory.App;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import net.vatri.inventory.models.ProductGroup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,7 @@ public class AddEditGroupController extends BaseController implements Initializa
 
 	private void _loadGroupData(String groupId){
 		// System.out.println("Loading product " + productId);
-		ProductGroupModel group = new ProductGroupModel(groupId);
+		ProductGroup group = new ProductGroup(groupId);
 		fldName.setText(group.getName());
 		fldPrice.setText(group.getPrice());
 		// fldVariants.setText(group.getVariantsAsString());

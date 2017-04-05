@@ -1,4 +1,4 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -19,6 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import net.vatri.inventory.App;
+import net.vatri.inventory.models.Product;
+import net.vatri.inventory.models.ProductGroup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +32,7 @@ public class AddEditProductController extends BaseController implements Initiali
     @FXML private TextField fldPrice;
     @FXML private Label errorLabel;
     @FXML private Label savedLabel;
-    @FXML private ComboBox<ProductGroupModel> groupCombo;
+    @FXML private ComboBox<ProductGroup> groupCombo;
 
     // Based on this value, we know if this is adding or editing page...
 	private String _productId = App.getInstance().repository.get("selectedProductId");
@@ -45,30 +48,20 @@ public class AddEditProductController extends BaseController implements Initiali
 
 	private void _loadProductData(String productId){
 		// System.out.println("Loading product " + productId);
-		ProductModel product = new ProductModel(productId);
+//		ProductModel product = new ProductModel(productId);
+		Product product = inventoryService.getProduct(productId);
 		fldName.setText(product.getName());
-		fldPrice.setText(product.price);
+		fldPrice.setText(product.getPrice());
 		_fillGroupComboData(product.getGroup());
 	}
 
-	private void _fillGroupComboData(String selectedGroup){
-		// Fill combo group:
-		ObservableList<ProductGroupModel> comboData = FXCollections.observableArrayList();
-		ProductGroupModel productGroupModel = new ProductGroupModel();
-		// ObservableList<Map<String, String>> pg = productGroupModel.all();
-		for( Map<String,String> pg : new ProductGroupModel().all() ){
-			comboData.add(
-				new ProductGroupModel(
-					pg.get("id").toString(),
-					pg.get("group_name").toString()
-				)
-			);
-		}
+	private void _fillGroupComboData(ProductGroup selectedGroup){
+		ObservableList<ProductGroup> comboData = FXCollections.observableArrayList(
+				inventoryService.getGroups()
+		);
  		groupCombo.getItems().addAll(comboData);
-// System.out.println("Selected group: "+selectedGroup);
- 		if( selectedGroup != null && !selectedGroup.equals("0")){
-			ProductGroupModel pgModel = new ProductGroupModel(selectedGroup);
-			groupCombo.getSelectionModel().select(pgModel);
+ 		if( selectedGroup != null && selectedGroup.getId() > 0 ){
+			groupCombo.getSelectionModel().select(selectedGroup);
  		}
 	}
 
@@ -77,9 +70,7 @@ public class AddEditProductController extends BaseController implements Initiali
 		savedLabel.setVisible(false);
 	}
 
-	@FXML protected void handleBack(){
-		App.showPage("products");
-	}
+	@FXML protected void handleBack(){ App.showPage("products"); }
 
 	@FXML protected boolean handleSaveProduct(ActionEvent event){
 
@@ -88,25 +79,27 @@ public class AddEditProductController extends BaseController implements Initiali
 			return false;
 		} else {
 
-
 			// Set model data and save into database:
-			ProductModel model = new ProductModel();
+			Product model = new Product();
 			model.setName(fldName.getText());
 			model.setPrice(fldPrice.getText());
 
 			// If product group is selected, insert into database
-			ProductGroupModel selectedGroup = groupCombo.getSelectionModel().getSelectedItem();
+			ProductGroup selectedGroup = groupCombo.getSelectionModel().getSelectedItem();
 			if(selectedGroup != null){
 			 	// insertData.put("group_id", selectedGroup.getId());
-			 	model.setGroup(selectedGroup.getId(), "name-not-needed");
+			 	model.setGroup(selectedGroup);
 			}
 
+//how to save this using hibernate? Call inventoryService.saveProduct..?
 			if(_productId != null){
 				model.setId(_productId);
 			}
 
+			boolean isProductSaved = inventoryService.saveProduct(model);
+
 			// model.setData(insertData);
-			if(! model.save()){
+			if(isProductSaved){
 				errorLabel.setText("ERROR: can't save your form. Please contact IT support team!");
 				return false;
 			} else {

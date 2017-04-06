@@ -58,14 +58,13 @@ public class InventoryServiceHibernate implements InventoryService {
     public boolean saveGroup(ProductGroup group) {
         Session session = getSessionFactory().openSession();
 
-        if(group.getId() > 0){
+        if(group.getId() != null){
             session.save(group);
-            group.setId(todo);
         } else {
             session.update(group);
         }
-
         session.close();
+        return true;
     }
 
 
@@ -96,11 +95,15 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public String getGroupVariantsAsString(ProductGroup group){
-        String out = "";
-        for(GroupVariant gv : group.getGroupVariants()){
-            out.concat(gv.getVariantName());
+        if(group.getGroupVariants() == null || group.getGroupVariants().size() < 1) {
+            return "";
         }
-        out.substring(0, out.length()-1);
+
+        String out = "";
+        for (GroupVariant gv : group.getGroupVariants()) {
+            out += gv.getVariantName() + ",";
+        }
+        out = out.substring(0, out.length() - 1);
         return out;
     }
 

@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.DashboardController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.controllers.DashboardController">
   <children>
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dfdfdf" height="71.0" layoutX="14.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" width="167.0" />
     <Label alignment="CENTER_LEFT" contentDisplay="LEFT" layoutX="14.0" layoutY="14.0" text="DASHBOARD">

@@ -3,10 +3,13 @@ package net.vatri.inventory.services;
 import junit.framework.TestCase;
 import net.vatri.inventory.models.GroupVariant;
 import net.vatri.inventory.models.ProductGroup;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 public class InventoryServiceHibernateTest extends TestCase {
 
@@ -14,19 +17,13 @@ public class InventoryServiceHibernateTest extends TestCase {
 
     @Override
     public void setUp(){
-        SessionFactory sessionFactory = new FakeSessionFactory();
+        SessionFactory sessionFactory = mock(SessionFactory.class);
+        Session sess = mock(Session.class);
+
+        when(sessionFactory.openSession()).thenReturn(sess);
+        when(sess.save(new Object())).thenReturn(null);
+
         inventoryService = new InventoryServiceHibernate(sessionFactory);
-    }
-
-    // This is required so after saving of this object, we can take ID and save variants for example:
-    public void testSaveGroupUpdateIdOfModelObject() throws Exception {
-
-        ProductGroup g = new ProductGroup();
-        g.setGroupName("Test");
-
-        inventoryService.saveGroup(g);
-
-        assertTrue(g.getId() > 0);
     }
 
     public void testGroupVariantsSetAndGetAsString(){
@@ -64,6 +61,7 @@ public class InventoryServiceHibernateTest extends TestCase {
     private List<GroupVariant> getProductGroupVariants(String variants){
         List<GroupVariant> list = new ArrayList<GroupVariant>();
         for(String vn : variants.split(",")){
+            if(vn.length() < 1){ continue; }
             GroupVariant gv = new GroupVariant();
             gv.setVariantName(vn);
             list.add(gv);

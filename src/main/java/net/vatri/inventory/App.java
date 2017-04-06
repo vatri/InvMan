@@ -16,7 +16,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class App extends Application{
 
-	private static BorderPane          mainPane = new BorderPane();
+    private static BorderPane          mainPane = new BorderPane();
 	private static Parent              mainMenu;
 	private static Map<String, String> _config;
 	static
@@ -143,11 +143,8 @@ public class App extends Application{
 			final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
 					.configure() // configures settings from hibernate.cfg.xml
 					.build();
-            System.out.println("SEssion factory is:");
             try {
-System.out.println("Getting session factory:");
                 sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-System.out.println(sessionFactory);
 			} catch (Exception e) {
 				// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
 				// so destroy it manually.

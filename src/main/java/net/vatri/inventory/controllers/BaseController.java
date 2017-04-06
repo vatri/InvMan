@@ -5,5 +5,5 @@ import net.vatri.inventory.services.InventoryService;
 import net.vatri.inventory.services.InventoryServiceHibernate;
 
 public class BaseController{
-    InventoryService inventoryService = new InventoryServiceHibernate(App.getSessionFactory());
+    InventoryService inventoryService = new InventoryServiceHibernate(App.getInstance().getSessionFactory());
 }

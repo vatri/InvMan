@@ -7,28 +7,24 @@ import java.util.List;
 @Entity
 @Table(name="product_groups")
 public class ProductGroup {
-    @Id
-    @GeneratedValue
-    private Integer id;
 
-    @Column(name="group_name")
+    private Integer id;
     private String groupName;
     private String price;
     private String created;//Todo - Date type...
-    private List<GroupVariant> groupVariants;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productGroup")
+    private List<GroupVariant> groupVariants = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     public List<GroupVariant> getGroupVariants() {
         return groupVariants;
     }
-
     public void setGroupVariants(List<GroupVariant> groupVariants) {
         this.groupVariants = groupVariants;
     }
 
-
-
-
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -37,6 +33,7 @@ public class ProductGroup {
         this.id = id;
     }
 
+    @Column(name="group_name")
     public String getGroupName() {
         return groupName;
     }

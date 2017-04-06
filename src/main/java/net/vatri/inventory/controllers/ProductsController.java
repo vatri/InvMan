@@ -30,7 +30,7 @@ public class ProductsController extends BaseController implements Initializable 
 
     public void initialize(URL url, ResourceBundle rb){
 
-		SessionFactory sessionFactory = App.getSessionFactory();
+		SessionFactory sessionFactory = App.getInstance().getSessionFactory();
 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();

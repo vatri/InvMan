@@ -1,5 +1,5 @@
 package net.vatri.inventory.controllers;
-import net.vatri.inventory.StockModel;
+import net.vatri.inventory.models.StockModel;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

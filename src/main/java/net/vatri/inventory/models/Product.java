@@ -1,21 +1,20 @@
 package net.vatri.inventory.models;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "products")
 public class Product {
 
-    @Id
     private String id;
     private String name;
     private String created;
     private String price;
     private ProductGroup group;
 
+    @Id
+    @GeneratedValue
     public String getId() {
         return id;
     }
@@ -48,6 +47,8 @@ public class Product {
         this.price = price;
     }
 
+    @ManyToOne
+    @JoinColumn(name="group_id")
     public ProductGroup getGroup() {
         return group;
     }

@@ -36,9 +36,9 @@ public class App extends Application{
 	private static App instance = null;
 
 	/**
-	* Hibernate session factory (singleton)
+	* Hibernate session factory
 	**/
-	private static SessionFactory sessionFactory = null;
+	private SessionFactory sessionFactory = null;
 
 	@Override
 	public void start(Stage primaryStage){
@@ -138,18 +138,20 @@ public class App extends Application{
 		return instance;
 	}
 
-	public static SessionFactory getSessionFactory(){
-		if( sessionFactory == null ){
-//			sessionFactory = new Configuration().configure().buildSessionFactory();
+	public SessionFactory getSessionFactory(){
+		if(sessionFactory == null) {
 			final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
 					.configure() // configures settings from hibernate.cfg.xml
 					.build();
-			try {
-				sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            System.out.println("SEssion factory is:");
+            try {
+System.out.println("Getting session factory:");
+                sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+System.out.println(sessionFactory);
 			} catch (Exception e) {
 				// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
 				// so destroy it manually.
-				StandardServiceRegistryBuilder.destroy( registry );
+				StandardServiceRegistryBuilder.destroy(registry);
 				System.out.println(e.getMessage());
 			}
 		}

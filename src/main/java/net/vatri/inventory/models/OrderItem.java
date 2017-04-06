@@ -1,21 +1,21 @@
 package net.vatri.inventory.models;
 
+import org.hibernate.engine.internal.JoinSequence;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="order_items")
 public class OrderItem {
 
-    @Id
-    @GeneratedValue
     private Integer id;
-    @ManyToOne
     private Order order;
     private Product product;
     private GroupVariant groupVariant;
     private String price;
 
-
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -24,6 +24,8 @@ public class OrderItem {
         this.id = id;
     }
 
+    @ManyToOne
+    @JoinColumn(name="order_id")
     public Order getOrder() {
         return order;
     }
@@ -32,6 +34,8 @@ public class OrderItem {
         this.order = order;
     }
 
+    @ManyToOne
+    @JoinColumn(name="product_id")
     public Product getProduct() {
         return product;
     }
@@ -40,6 +44,8 @@ public class OrderItem {
         this.product = product;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "product_variant_id")
     public GroupVariant getGroupVariant() {
         return groupVariant;
     }

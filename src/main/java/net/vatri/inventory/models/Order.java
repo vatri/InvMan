@@ -6,8 +6,6 @@ import java.util.List;
 @Entity
 @Table(name="orders")
 public class Order {
-    @Id
-    @GeneratedValue
     private Integer id;
     private String name;
     private String address;
@@ -15,14 +13,14 @@ public class Order {
     private String zip;
     private String status;
     private String comment;
-    @Column(name="total_price")
     private String totalPrice;
     private String type;
     private String created;//Todo - Date type...
 
-    @OneToMany
     private List<OrderItem> items;
 
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -79,6 +77,7 @@ public class Order {
         this.comment = comment;
     }
 
+    @Column(name="total_price")
     public String getTotalPrice() {
         return totalPrice;
     }
@@ -103,6 +102,7 @@ public class Order {
         this.created = created;
     }
 
+    @OneToMany(mappedBy = "order")
     public List<OrderItem> getItems() {
         return items;
     }

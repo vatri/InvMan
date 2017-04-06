@@ -2,9 +2,11 @@ package net.vatri.inventory.services;
 
 import net.vatri.inventory.App;
 import net.vatri.inventory.models.*;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,9 @@ public class InventoryServiceHibernate implements InventoryService {
     private SessionFactory sessionFactory;
 
     public InventoryServiceHibernate(SessionFactory sessionFactory) {
+        System.out.println("sessionFactory:");
+        System.out.println(sessionFactory);
+        
         this.sessionFactory = sessionFactory;
     }
 
@@ -26,7 +31,16 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public User getUserByEmail(String email) {
-        return null;
+        Session s = getSessionFactory().openSession();
+
+        User user = (User) s.createQuery( "FROM User WHERE email = :email" )
+                .setParameter( "email", email )
+                .uniqueResult();
+
+        s.close();
+System.out.println("USER:");
+System.out.println(user);
+        return user;
     }
 
     @Override

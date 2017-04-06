@@ -6,15 +6,12 @@ import javax.persistence.*;
 @Table(name="group_variants")
 public class GroupVariant {
 
+    private Integer id;
+    private String variantName;
+    private ProductGroup group;
+
     @Id
     @GeneratedValue
-    private Integer id;
-
-    @Column(name="variant_name")
-    private String variantName;
-
-    private ProductGroup order;
-
     public Integer getId() {
         return id;
     }
@@ -23,6 +20,7 @@ public class GroupVariant {
         this.id = id;
     }
 
+    @Column(name="variant_name")
     public String getVariantName() {
         return variantName;
     }
@@ -31,11 +29,13 @@ public class GroupVariant {
         this.variantName = variantName;
     }
 
-    public ProductGroup getOrder() {
-        return order;
+    @ManyToOne
+    @JoinColumn(name="group_id")
+    public ProductGroup getGroup() {
+        return group;
     }
 
-    public void setOrder(ProductGroup order) {
-        this.order = order;
+    public void setGroup(ProductGroup group) {
+        this.group = group;
     }
 }

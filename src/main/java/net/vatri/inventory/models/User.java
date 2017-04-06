@@ -6,20 +6,15 @@ import javax.persistence.*;
 @Table(name="users")
 public class User {
 
-    @Id
-    @GeneratedValue
     private Integer id;
-
     private String name;
-
-    @Column(unique = true)
     private String email;
     private String password;
-    @Column(name="access_token")
     private String accessToken;
     private String created;//Todo - Date type...
 
-
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id;
     }
@@ -36,6 +31,7 @@ public class User {
         this.name = name;
     }
 
+    @Column(unique = true)
     public String getEmail() {
         return email;
     }
@@ -52,6 +48,7 @@ public class User {
         this.password = password;
     }
 
+    @Column(name="access_token")
     public String getAccessToken() {
         return accessToken;
     }

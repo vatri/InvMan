@@ -52,15 +52,18 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public List<Product> getProducts() {
-        return null;
+        Session session = getSessionFactory().openSession();
+        List<Product> list = (List<Product>) session.createQuery( "FROM Product" ).list();
+        session.close();
+        return list;
     }
 
     @Override
     public Product getProduct(String id) {
         Session session = getSessionFactory().openSession();
-        Product res = (Product) session.get(Product.class, Integer.parseInt(id));
+        Product product = (Product) session.get(Product.class, Integer.parseInt(id));
         session.close();
-        return res;
+        return product;
     }
 
     @Override
@@ -70,8 +73,6 @@ public class InventoryServiceHibernate implements InventoryService {
         try {
             if (product.getId() != null) {
                 session.update(product);
-                System.out.print("DOPUNA POSTOJECEG OBJEKTA:");
-                System.out.println(product.getName());
             } else {
                 session.save(product);
             }
@@ -89,9 +90,9 @@ public class InventoryServiceHibernate implements InventoryService {
     @Override
     public List<ProductGroup> getGroups() {
         Session session = getSessionFactory().openSession();
-        List<ProductGroup> res = (List<ProductGroup>) session.createQuery( "FROM ProductGroup" ).list();
+        List<ProductGroup> list = (List<ProductGroup>) session.createQuery( "FROM ProductGroup" ).list();
         session.close();
-        return res;
+        return list;
     }
 
     @Override
@@ -102,14 +103,22 @@ public class InventoryServiceHibernate implements InventoryService {
     @Override
     public boolean saveGroup(ProductGroup group) {
         Session session = getSessionFactory().openSession();
-
-        if(group.getId() != null){
-            session.save(group);
-        } else {
-            session.update(group);
+        session.beginTransaction();
+        try {
+            if (group.getId() != null) {
+                session.update(group);
+            } else {
+                session.save(group);
+            }
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException e){
+            System.out.print(e.getMessage());
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            session.close();
         }
-        session.close();
-        return true;
     }
 
 

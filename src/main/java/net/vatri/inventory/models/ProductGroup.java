@@ -24,7 +24,7 @@ public class ProductGroup {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -56,5 +56,9 @@ public class ProductGroup {
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public String toString(){
+        return this.groupName;
     }
 }

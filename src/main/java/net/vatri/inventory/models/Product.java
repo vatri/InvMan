@@ -7,19 +7,20 @@ import javax.persistence.*;
 @Table(name = "products")
 public class Product {
 
-    private String id;
+    private Integer id;
     private String name;
     private String created;
     private String price;
     private ProductGroup group;
 
     @Id
-    @GeneratedValue
-    public String getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

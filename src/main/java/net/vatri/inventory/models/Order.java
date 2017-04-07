@@ -20,7 +20,7 @@ public class Order {
     private List<OrderItem> items;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

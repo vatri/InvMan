@@ -1,16 +1,18 @@
 package net.vatri.inventory.services;
 
 import net.vatri.inventory.models.*;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
 
 public class InventoryServiceHibernate implements InventoryService {
 
@@ -27,10 +29,7 @@ public class InventoryServiceHibernate implements InventoryService {
     // private static final String TBL_PURCHASES = "purchases";
 
     public InventoryServiceHibernate(SessionFactory sessionFactory) {
-        System.out.println("sessionFactory:");
-        System.out.println(sessionFactory);
-
-        this.sessionFactory = sessionFactory;
+        this.setSessionFactory(sessionFactory);
     }
 
     public SessionFactory getSessionFactory() {
@@ -43,15 +42,11 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public User getUserByEmail(String email) {
-        Session s = getSessionFactory().openSession();
-
-        User user = (User) s.createQuery( "FROM User WHERE email = :email" )
+        Session session = getSessionFactory().openSession();
+        User user = (User) session.createQuery( "FROM User WHERE email = :email" )
                 .setParameter( "email", email )
                 .uniqueResult();
-
-        s.close();
-System.out.println("USER:");
-System.out.println(user);
+        session.close();
         return user;
     }
 
@@ -62,17 +57,41 @@ System.out.println(user);
 
     @Override
     public Product getProduct(String id) {
-        return null;
+        Session session = getSessionFactory().openSession();
+        Product res = (Product) session.get(Product.class, Integer.parseInt(id));
+        session.close();
+        return res;
     }
 
     @Override
     public boolean saveProduct(Product product) {
-        return false;
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+        try {
+            if (product.getId() != null) {
+                session.update(product);
+                System.out.print("DOPUNA POSTOJECEG OBJEKTA:");
+                System.out.println(product.getName());
+            } else {
+                session.save(product);
+            }
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException e){
+            System.out.print(e.getMessage());
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            session.close();
+        }
     }
 
     @Override
     public List<ProductGroup> getGroups() {
-        return null;
+        Session session = getSessionFactory().openSession();
+        List<ProductGroup> res = (List<ProductGroup>) session.createQuery( "FROM ProductGroup" ).list();
+        session.close();
+        return res;
     }
 
     @Override

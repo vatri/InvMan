@@ -58,7 +58,7 @@ public class ProductsController extends BaseController implements Initializable 
 
 	@FXML protected void openProduct(){
 		Product prod = tblProducts.getSelectionModel().getSelectedItem();
-		App.getInstance().repository.put("selectedProductId", prod.getId());
+		App.getInstance().repository.put("selectedProductId", prod.getId().toString());
 		App.showPage("newProduct");
 	}
 

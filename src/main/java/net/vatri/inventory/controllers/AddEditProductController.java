@@ -29,31 +29,32 @@ public class AddEditProductController extends BaseController implements Initiali
 	private String _productId = App.getInstance().repository.get("selectedProductId");
 
 	public void initialize(URL url, ResourceBundle rb){
-
-		_fillGroupComboData( inventoryService.getProduct(_productId).getGroup() );
-		
 		if(_productId != null){
-			_loadProductData(_productId);	
+			_loadProductData(_productId);
+			_fillGroupComboData( inventoryService.getProduct(_productId).getGroup() );
+		} else {
+			_fillGroupComboData(null);
 		}
 	}
 
 	private void _loadProductData(String productId){
-		// System.out.println("Loading product " + productId);
-//		ProductModel product = new ProductModel(productId);
 		Product product = inventoryService.getProduct(productId);
 		fldName.setText(product.getName());
 		fldPrice.setText(product.getPrice());
-		_fillGroupComboData(product.getGroup());
 	}
 
-	private void _fillGroupComboData(ProductGroup selectedGroup){
+	private boolean _fillGroupComboData(ProductGroup selectedGroup){
+
 		ObservableList<ProductGroup> comboData = FXCollections.observableArrayList(
 				inventoryService.getGroups()
 		);
  		groupCombo.getItems().addAll(comboData);
- 		if( selectedGroup != null && selectedGroup.getId() > 0 ){
+
+		if(selectedGroup != null && selectedGroup.getId() > 0) {
 			groupCombo.getSelectionModel().select(selectedGroup);
- 		}
+		}
+
+ 		return true;
 	}
 
 	@FXML protected void hideLabels(){
@@ -68,41 +69,41 @@ public class AddEditProductController extends BaseController implements Initiali
 		if( ! fldPrice.getText().matches("[0-9.]*") || fldName.getText().length() < 2){
 			errorLabel.setVisible(true);
 			return false;
-		} else {
+		} 
 
-			// Set model data and save into database:
-			Product model = new Product();
-			model.setName(fldName.getText());
-			model.setPrice(fldPrice.getText());
+		// Set model data and save into database:
+		Product product = new Product();
+		product.setName(fldName.getText());
+		product.setPrice(fldPrice.getText());
 
-			// If product group is selected, insert into database
-			ProductGroup selectedGroup = groupCombo.getSelectionModel().getSelectedItem();
-			if(selectedGroup != null){
-			 	// insertData.put("group_id", selectedGroup.getId());
-			 	model.setGroup(selectedGroup);
-			}
+		// If product group is selected, insert into database
+		ProductGroup selectedGroup = groupCombo.getSelectionModel().getSelectedItem();
+		if(selectedGroup != null){
+			// insertData.put("group_id", selectedGroup.getId());
+			product.setGroup(selectedGroup);
+		}
 
 //how to save this using hibernate? Call inventoryService.saveProduct..?
-			if(_productId != null){
-				model.setId(_productId);
-			}
-
-			boolean isProductSaved = inventoryService.saveProduct(model);
-
-			if(isProductSaved){
-				errorLabel.setText("ERROR: can't save your form. Please contact IT support team!");
-				return false;
-			} else {
-				// Clear fields when we insert a new item...
-				if(_productId == null){
-					fldName.setText("");
-					fldPrice.setText("");
-				}
-				savedLabel.setVisible(true);
-				errorLabel.setVisible(false);
-				return true;
-			}
+		if(_productId != null){
+			product.setId(Integer.parseInt(_productId));
 		}
+
+		boolean isProductSaved = inventoryService.saveProduct(product);
+
+		if(! isProductSaved){
+			errorLabel.setText("ERROR: can't save your form. Please contact IT support team!");
+			return false;
+		} else {
+			// Clear fields when we insert a new item...
+			if(_productId == null){
+				fldName.setText("");
+				fldPrice.setText("");
+			}
+			savedLabel.setVisible(true);
+			errorLabel.setVisible(false);
+			return true;
+		}
+		
 	}
 }//class
 

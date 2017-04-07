@@ -14,7 +14,7 @@ public class User {
     private String created;//Todo - Date type...
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

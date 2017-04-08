@@ -30,10 +30,9 @@ public class GroupsController extends BaseController implements Initializable {
 		ObservableList<ProductGroup> tblData = FXCollections.observableArrayList(
 				inventoryService.getGroups()
 		);
-		tblData.addAll(tblData);
 
 		idCol.setCellValueFactory( new PropertyValueFactory<>("id"));
-		groupCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+		groupCol.setCellValueFactory(new PropertyValueFactory<>("groupName"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
 		tblGroups.setItems(tblData);

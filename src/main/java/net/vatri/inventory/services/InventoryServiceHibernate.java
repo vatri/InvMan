@@ -8,10 +8,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import javax.persistence.Query;
+import java.util.*;
 
 
 public class InventoryServiceHibernate implements InventoryService {
@@ -40,30 +38,57 @@ public class InventoryServiceHibernate implements InventoryService {
         this.sessionFactory = sessionFactory;
     }
 
+    /**
+     * Get list of Hibernate entities
+     * @param name Name of Entity
+     * @return List
+     */
+    private List list(String name){
+        Session session = getSessionFactory().openSession();
+
+        try {
+            return session.createQuery("FROM " + name).list();
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * Get hibernate entity by ID (primary key)
+     * @param entity For example: Product.class
+     * @param id Id of entity to get
+     * @return Object
+     */
+    private Object get(Class entity, String id){
+        Session session = getSessionFactory().openSession();
+        return session.get(entity, Integer.parseInt(id));
+    }
+
+
+
+
+
+
     @Override
     public User getUserByEmail(String email) {
         Session session = getSessionFactory().openSession();
         User user = (User) session.createQuery( "FROM User WHERE email = :email" )
                 .setParameter( "email", email )
                 .uniqueResult();
+
         session.close();
         return user;
     }
 
     @Override
     public List<Product> getProducts() {
-        Session session = getSessionFactory().openSession();
-        List<Product> list = (List<Product>) session.createQuery( "FROM Product" ).list();
-        session.close();
+        List<Product> list = (List<Product>) this.list("Product");
         return list;
     }
 
     @Override
     public Product getProduct(String id) {
-        Session session = getSessionFactory().openSession();
-        Product product = (Product) session.get(Product.class, Integer.parseInt(id));
-        session.close();
-        return product;
+        return (Product) get(Product.class, id);
     }
 
     @Override
@@ -89,15 +114,12 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public List<ProductGroup> getGroups() {
-        Session session = getSessionFactory().openSession();
-        List<ProductGroup> list = (List<ProductGroup>) session.createQuery( "FROM ProductGroup" ).list();
-        session.close();
-        return list;
+        return (List<ProductGroup>) this.list("ProductGroup");
     }
 
     @Override
     public ProductGroup getGroup(String id) {
-        return null;
+        return (ProductGroup) this.get(ProductGroup.class, id);
     }
 
     @Override
@@ -129,12 +151,12 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public List<GroupVariant> getVariants() {
-        return null;
+        return (List<GroupVariant>) this.list("GroupVariant");
     }
 
     @Override
     public GroupVariant getVariant(String id) {
-        return null;
+        return (GroupVariant) this.get(GroupVariant.class, id);
     }
 
     @Override
@@ -161,26 +183,57 @@ public class InventoryServiceHibernate implements InventoryService {
         return out;
     }
 
-
-
     @Override
     public List<Order> getOrders() {
-        return null;
+        return (List<Order>) this.list("Order");
     }
 
     @Override
     public List<Order> getOrders(Map<String, String> params) {
-        return null;
+
+        Session session = getSessionFactory().openSession();
+
+        Query query = session.createQuery("FROM Order");
+
+        Iterator<Map.Entry<String,String>> it = params.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry<String, String> par = it.next();
+            String key = par.getKey();
+            String val = par.getValue();
+
+            query.setParameter(key, val);
+        }
+
+        List<Order> list = (List<Order>) query.getResultList();
+        session.close();
+
+        return list;
     }
 
     @Override
     public Order getOrder(String id) {
-        return null;
+        return (Order) this.get(Order.class, id);
     }
 
     @Override
     public boolean saveOrder(Order order) {
-        return false;
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+        try {
+            if (order.getId() != null) {
+                session.update(order);
+            } else {
+                session.save(order);
+            }
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException e){
+            System.out.print(e.getMessage());
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            session.close();
+        }
     }
 
     @Override

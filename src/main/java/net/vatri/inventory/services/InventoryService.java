@@ -33,7 +33,7 @@ public interface InventoryService{
     public boolean saveOrder(Order order);
     public List<OrderItem> getOrderItems(String orderId);
 
-    public List<Map<String,String>> getStock();
+    public List<StockModel> getStock();
 
     public Map<String,String> getStats();
 

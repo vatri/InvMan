@@ -1,4 +1,5 @@
 package net.vatri.inventory.controllers;
+
 import net.vatri.inventory.models.StockModel;
 
 import javafx.collections.FXCollections;
@@ -22,21 +23,13 @@ public class StockController extends BaseController implements Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
 
-        ObservableList<StockModel> tblData = FXCollections.observableArrayList();
+        colProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colVariant.setCellValueFactory(new PropertyValueFactory<>("variantName"));
+        colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
-        for (Map<String, String> row : inventoryService.getStock()) {
-            StockModel m = new StockModel(row.get("product_name"),row.get("variant_name"),row.get("stock"));
-            tblData.add(m);
-        }
-        
-        try {
-            colProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
-            colVariant.setCellValueFactory(new PropertyValueFactory<>("variantName"));
-            colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        } catch( Exception ex){
-            System.out.println("Stock Init Error: " + ex.getMessage());
-        }
-        tblStock.setItems(tblData);
+        tblStock.setItems(FXCollections.observableArrayList(
+                inventoryService.getStock()
+        ));
     }
 
 }

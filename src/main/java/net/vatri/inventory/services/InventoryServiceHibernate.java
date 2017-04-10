@@ -223,8 +223,53 @@ public class InventoryServiceHibernate implements InventoryService {
     }
 
     @Override
-    public List<Map<String, String>> getStock() {
-        return null;
+    public List<StockModel> getStock() {
+        String strQuery = "SELECT DISTINCT"
+				+ "	p.name as product_name "
+				+ "	, gv.variant_name "
+				+ " ,(select buy_cnt  - sell_cnt "
+				+ " FROM ( "
+					+ " SELECT "
+						+ "( "
+							+ " select count(o.id) "
+							+ " from orders o "
+							+ " LEFT JOIN order_items oi on oi.order_id = o.id "
+							+ " WHERE o.type = 'buy' and oi.product_id = p.id AND oi.product_variant_id = gv.id "
+						+ " ) as buy_cnt "
+						+ " ,( "
+							+ " select count(o2.id) "
+							+ " from orders o2 "
+							+ " LEFT JOIN order_items oi on oi.order_id = o2.id "
+							+ " WHERE o2.type = 'sell' and oi.product_id = p.id AND oi.product_variant_id = gv.id "
+							+ " ) as sell_cnt "
+					+ " ) as tbl "
+				+ " ) as `stock` "
+			+ " FROM products p "
+			+ " LEFT JOIN group_variants gv ON gv.group_id = p.group_id "
+			+ " ORDER BY product_name ";
+
+        Session session = getSessionFactory().openSession();
+        List<Object[] > tmpList = session.getEntityManagerFactory()
+                .createEntityManager()
+                .createNativeQuery(strQuery)
+                .getResultList();
+
+// System.out.println(tmpList);
+
+        List<StockModel> res = new ArrayList<>();
+        tmpList.stream().forEach(row -> {
+            if (row.length > 2) {
+                String productName = (String) row[0];
+                String variantName = (String)row[1];
+                String qty = row[2].toString();
+                res.add(new StockModel(productName, variantName, qty));
+            } else {
+                System.out.println("Can't initialize stock model");
+            }
+        });
+
+        session.close();
+        return res;
     }
 
     @Override
@@ -248,7 +293,10 @@ public class InventoryServiceHibernate implements InventoryService {
 
 //            return getQueryBuilder().query(strQuery).first();
         Session session = getSessionFactory().openSession();
-        Object[] res = (Object[]) session.getEntityManagerFactory().createEntityManager().createNativeQuery(strQuery).getSingleResult();
+        Object[] res = (Object[]) session.getEntityManagerFactory()
+                .createEntityManager()
+                .createNativeQuery(strQuery)
+                .getSingleResult();
 
         session.close();
 

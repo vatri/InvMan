@@ -15,6 +15,7 @@ public class ProductGroup {
 
     private List<GroupVariant> groupVariants = new ArrayList<>();
 
+    // Todo: use lazy loading if we get a performance issue.
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     public List<GroupVariant> getGroupVariants() {
         return groupVariants;

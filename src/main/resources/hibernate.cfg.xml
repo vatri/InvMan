@@ -11,19 +11,14 @@
         <property name="hibernate.connection.password"></property>
 
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-
-        <property name="show_sql">true</property>
-
+        <property name="show_sql">false</property>
 
         <mapping class="net.vatri.inventory.models.Product"></mapping>
         <mapping class="net.vatri.inventory.models.ProductGroup"></mapping>
         <mapping class="net.vatri.inventory.models.GroupVariant"></mapping>
-
         <mapping class="net.vatri.inventory.models.User"></mapping>
-
         <mapping class="net.vatri.inventory.models.Order"></mapping>
         <mapping class="net.vatri.inventory.models.OrderItem"></mapping>
-
 
     </session-factory>
 </hibernate-configuration>

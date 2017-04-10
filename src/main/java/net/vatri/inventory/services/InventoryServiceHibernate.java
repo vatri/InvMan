@@ -1,6 +1,7 @@
 package net.vatri.inventory.services;
 
 import net.vatri.inventory.models.*;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -45,7 +46,6 @@ public class InventoryServiceHibernate implements InventoryService {
      */
     private List list(String name){
         Session session = getSessionFactory().openSession();
-
         try {
             return session.createQuery("FROM " + name).list();
         } finally {
@@ -61,9 +61,30 @@ public class InventoryServiceHibernate implements InventoryService {
      */
     private Object get(Class entity, String id){
         Session session = getSessionFactory().openSession();
-        return session.get(entity, Integer.parseInt(id));
+        Object res = session.get(entity, Integer.parseInt(id));
+        session.close();
+        return res;
     }
 
+    private boolean save(Object entity, Integer id){
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+        try {
+            if (id != null) {
+                session.update(entity);
+            } else {
+                session.save(entity);
+            }
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException e){
+            System.out.print(e.getMessage());
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            session.close();
+        }
+    }
 
 
 
@@ -88,28 +109,12 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public Product getProduct(String id) {
-        return (Product) get(Product.class, id);
+        return (Product) this.get(Product.class, id);
     }
 
     @Override
     public boolean saveProduct(Product product) {
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
-        try {
-            if (product.getId() != null) {
-                session.update(product);
-            } else {
-                session.save(product);
-            }
-            session.getTransaction().commit();
-            return true;
-        } catch (HibernateException e){
-            System.out.print(e.getMessage());
-            session.getTransaction().rollback();
-            return false;
-        } finally {
-            session.close();
-        }
+        return this.save(product, product.getId());
     }
 
     @Override
@@ -124,25 +129,8 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public boolean saveGroup(ProductGroup group) {
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
-        try {
-            if (group.getId() != null) {
-                session.update(group);
-            } else {
-                session.save(group);
-            }
-            session.getTransaction().commit();
-            return true;
-        } catch (HibernateException e){
-            System.out.print(e.getMessage());
-            session.getTransaction().rollback();
-            return false;
-        } finally {
-            session.close();
-        }
+        return this.save(group, group.getId());
     }
-
 
     @Override
     public List<GroupVariant> getVariantsByGroup(String groupId) {
@@ -171,15 +159,24 @@ public class InventoryServiceHibernate implements InventoryService {
 
     @Override
     public String getGroupVariantsAsString(ProductGroup group){
-        if(group.getGroupVariants() == null || group.getGroupVariants().size() < 1) {
+
+        // Make group Entity attached so that lazy loading works:
+        Session session = getSessionFactory().openSession();
+        session.update(group);
+
+        List<GroupVariant> groupVariants = group.getGroupVariants();
+
+        if(groupVariants == null || groupVariants.size() < 1) {
             return "";
         }
 
         String out = "";
-        for (GroupVariant gv : group.getGroupVariants()) {
+        for (GroupVariant gv : groupVariants) {
             out += gv.getVariantName() + ",";
         }
         out = out.substring(0, out.length() - 1);
+
+        session.close();
         return out;
     }
 
@@ -216,24 +213,8 @@ public class InventoryServiceHibernate implements InventoryService {
     }
 
     @Override
-    public boolean saveOrder(Order order) {
-        Session session = getSessionFactory().openSession();
-        session.beginTransaction();
-        try {
-            if (order.getId() != null) {
-                session.update(order);
-            } else {
-                session.save(order);
-            }
-            session.getTransaction().commit();
-            return true;
-        } catch (HibernateException e){
-            System.out.print(e.getMessage());
-            session.getTransaction().rollback();
-            return false;
-        } finally {
-            session.close();
-        }
+    public boolean saveOrder(Order order){
+        return this.save(order, order.getId());
     }
 
     @Override
@@ -263,8 +244,8 @@ public class InventoryServiceHibernate implements InventoryService {
                     + " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month1+"%' ) as orders1"
                     + " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month2+"%' ) as orders2"
                     + " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month3+"%' ) as orders3"
-                    + " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month4+"%' ) as orders4"
-                    ;
+                    + " , (SELECT count(*) FROM " + TBL_ORDERS + " where created LIKE '%"+month4+"%' ) as orders4";
+
 //            return getQueryBuilder().query(strQuery).first();
         Session session = getSessionFactory().openSession();
         Object[] res = (Object[]) session.getEntityManagerFactory().createEntityManager().createNativeQuery(strQuery).getSingleResult();
@@ -279,9 +260,6 @@ public class InventoryServiceHibernate implements InventoryService {
         out.put("orders2", res[4].toString());
         out.put("orders3", res[5].toString());
         out.put("orders4", res[6].toString());
-
-        System.out.println("out");
-        System.out.println(out);
 
         return out;
     }

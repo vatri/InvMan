@@ -54,6 +54,7 @@ public class App extends Application{
 		showPage("login");
 	}
 
+
 	public static void showPage(String page){
 
 		System.out.println("Showing page:" + page);

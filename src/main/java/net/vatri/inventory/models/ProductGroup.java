@@ -11,12 +11,12 @@ public class ProductGroup {
     private Integer id;
     private String groupName;
     private String price;
-    private String created;//Todo - Date type...
+
+    private String created;//Todo - Date type... @Temporal(TemporalType.TIMESTAMP)
 
     private List<GroupVariant> groupVariants = new ArrayList<>();
 
-    // Todo: use lazy loading if we get a performance issue.
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<GroupVariant> getGroupVariants() {
         return groupVariants;
     }

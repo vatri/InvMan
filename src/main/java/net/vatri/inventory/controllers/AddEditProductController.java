@@ -73,19 +73,16 @@ public class AddEditProductController extends BaseController implements Initiali
 
 		// Set model data and save into database:
 		Product product = new Product();
+		if(_productId != null){
+			product = inventoryService.getProduct(_productId);
+		}
 		product.setName(fldName.getText());
 		product.setPrice(fldPrice.getText());
-
 		// If product group is selected, insert into database
 		ProductGroup selectedGroup = groupCombo.getSelectionModel().getSelectedItem();
 		if(selectedGroup != null){
 			// insertData.put("group_id", selectedGroup.getId());
 			product.setGroup(selectedGroup);
-		}
-
-//how to save this using hibernate? Call inventoryService.saveProduct..?
-		if(_productId != null){
-			product.setId(Integer.parseInt(_productId));
 		}
 
 		boolean isProductSaved = inventoryService.saveProduct(product);

@@ -30,7 +30,6 @@ public class GroupVariant {
     }
 
     @ManyToOne
-    @JoinColumn(name="group_id")
     public ProductGroup getGroup() {
         return group;
     }

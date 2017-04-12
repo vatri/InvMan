@@ -26,6 +26,10 @@ public class InventoryServiceHibernateTest extends TestCase {
         inventoryService = new InventoryServiceHibernate(sessionFactory);
     }
 
+    public void testTemporaryVariantsInUse(){
+//        inventoryService.saveGroupVariants(null, "M,L");
+    }
+
     public void testGroupVariantsSetAndGetAsString(){
         ProductGroup group = new ProductGroup();
 

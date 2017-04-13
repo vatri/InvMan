@@ -1,5 +1,6 @@
 package net.vatri.inventory.controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
@@ -15,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.control.cell.TextFieldTableCell;
 import net.vatri.inventory.App;
 import net.vatri.inventory.models.*;
 
@@ -36,9 +38,9 @@ public class AddEditOrderController extends BaseController implements Initializa
     @FXML private ComboBox<GroupVariant> comboVariants;
 
     @FXML private TableView<OrderItem> tblItems;
-    @FXML private TableColumn<OrderItem, Product> colProduct;
-    @FXML private TableColumn<OrderItem, ProductGroup> colVariant;
-    @FXML private TableColumn<OrderItem, TextField> colPrice;
+    @FXML private TableColumn<Product, String> colProduct;
+    @FXML private TableColumn<GroupVariant, String> colVariant;
+    @FXML private TableColumn<OrderItem, String> colPrice;
 
     @FXML private Label errorLabel;
     @FXML private Label savedLabel;
@@ -49,18 +51,43 @@ public class AddEditOrderController extends BaseController implements Initializa
 	public void initialize(URL url, ResourceBundle rb){
 
 		_fillAllProductsCombo();
-		comboProducts.getSelectionModel().selectFirst();
 		comboStatus.getItems().addAll(STATUS_IN_PROGRESS, STATUS_COMPLETED);
 
 		comboType.getItems().addAll("sell", "buy");
 
-		colProduct.setCellValueFactory( new PropertyValueFactory<>("productName"));
-		colVariant.setCellValueFactory( new PropertyValueFactory<>("variantName"));
+		colProduct.setCellValueFactory( new PropertyValueFactory<>("product"));
+		colVariant.setCellValueFactory( new PropertyValueFactory<>("groupVariant"));
 		colPrice.setCellValueFactory( new PropertyValueFactory<>("price"));
+
+//		colPrice.setOnEditCommit(
+//                new EventHandler<TableColumn.CellEditEvent<OrderItem, TextField>>() {
+//                    @Override
+//                    public void handle(TableColumn.CellEditEvent<OrderItem, TextField> orderItemTextFieldCellEditEvent) {
+//
+//                    }
+//                }
+//        );
+
+//		tblItems.setEditable(true);
+//        colPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+//        colPrice.setEditable(true);
+
+//        emailCol.setOnEditCommit(
+//                new EventHandler<CellEditEvent<Person, String>>() {
+//                    @Override
+//                    public void handle(CellEditEvent<Person, String> t) {
+//                        ((Person) t.getTableView().getItems().get(
+//                                t.getTablePosition().getRow())
+//                        ).setEmail(t.getNewValue());
+//                    }
+//                }
+//        );
 
 		if(_orderId != null){
 			_loadOrderData(_orderId);	
 		}
+
+
 	}
 
 	private void _loadOrderData(String orderId){
@@ -87,6 +114,7 @@ public class AddEditOrderController extends BaseController implements Initializa
 		comboProducts.getItems().addAll(
 				inventoryService.getProducts()
 		);
+		comboProducts.getSelectionModel().selectFirst();
 	}
 
 	private void _fillVariantsCombo(Product product){
@@ -101,11 +129,12 @@ public class AddEditOrderController extends BaseController implements Initializa
 
 	// Fired when product in the combo is selected:
 	@FXML private void productSelected(){
-		if( comboProducts.getSelectionModel().getSelectedItem() != null){
-			System.out.println("Value in product combo is not ProductModel");
+		if( comboProducts.getSelectionModel().getSelectedItem() instanceof Product == false){
+			System.out.println("Value in product combo is not Product model");
 			return ;
 		}
-		Product selectedProduct = comboProducts.getSelectionModel().getSelectedItem();
+        Product selectedProduct = comboProducts.getSelectionModel().getSelectedItem();
+
 		_fillVariantsCombo(selectedProduct);
 	}
 
@@ -113,8 +142,8 @@ public class AddEditOrderController extends BaseController implements Initializa
 	@FXML private void addProduct(){
 
 		// If no product is selected, just skip this action
-		if( comboProducts.getSelectionModel().getSelectedItem() != null){
-			System.out.println("Value in product combo is not ProductModel");
+		if( comboProducts.getSelectionModel().getSelectedItem() instanceof Product == false){
+			System.out.println("Value in product combo is not Product model");
 			return ;
 		}
 
@@ -129,6 +158,7 @@ public class AddEditOrderController extends BaseController implements Initializa
 
 			tblItems.getItems().add(item);
 			comboProducts.getSelectionModel().selectFirst();
+			comboVariants.getItems().clear();
 		}
 	}
 

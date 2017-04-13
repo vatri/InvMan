@@ -60,6 +60,6 @@ public class ProductGroup {
     }
 
     public String toString(){
-        return this.groupName;
+        return getGroupName();
     }
 }

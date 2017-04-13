@@ -68,7 +68,7 @@ public class AddEditGroupController extends BaseController implements Initializa
             group.setPrice(fldPrice.getText());
             group.setGroupVariants( tblVariants.getItems() );
 
-            // Required in order to save successfully...
+            // Required in order to save successfully by Hibernate...
             for(GroupVariant gv : group.getGroupVariants()){
                 gv.setGroup(group);
             }

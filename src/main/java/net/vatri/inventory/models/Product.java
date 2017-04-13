@@ -58,4 +58,8 @@ public class Product {
         this.group = group;
     }
 
+    public String toString(){
+        return getName();
+    }
+
 }

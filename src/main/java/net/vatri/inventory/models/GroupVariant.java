@@ -37,4 +37,8 @@ public class GroupVariant {
     public void setGroup(ProductGroup group) {
         this.group = group;
     }
+
+    public String toString(){
+        return getVariantName();
+    }
 }

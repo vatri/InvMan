@@ -1,6 +1,6 @@
 package net.vatri.inventory.models;
 
-import org.hibernate.engine.internal.JoinSequence;
+import javafx.scene.control.TextField;
 
 import javax.persistence.*;
 
@@ -57,7 +57,6 @@ public class OrderItem {
     public String getPrice() {
         return price;
     }
-
     public void setPrice(String price) {
         this.price = price;
     }

@@ -1,6 +1,5 @@
 package net.vatri.inventory.models;
 
-
 import javax.persistence.*;
 
 @Entity

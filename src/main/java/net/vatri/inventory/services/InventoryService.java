@@ -31,6 +31,7 @@ public interface InventoryService{
     public List<Order> getOrders(Map<String,String> params);
     public Order getOrder(String id);
     public boolean saveOrder(Order order);
+    public void removeOrderItem(OrderItem orderItem);
 //    public List<OrderItem> getOrderItems(String orderId);
 
     public List<StockModel> getStock();

@@ -1,14 +1,15 @@
 package net.vatri.inventory.controllers;
 
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.TableColumn;
-
-import javafx.event.ActionEvent;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
@@ -16,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import javafx.scene.control.cell.TextFieldTableCell;
 import net.vatri.inventory.App;
 import net.vatri.inventory.models.*;
 
@@ -47,6 +47,9 @@ public class AddEditOrderController extends BaseController implements Initializa
 
     // Based on this value, we know if this is adding or editing page...
 	private String _orderId = App.getInstance().repository.get("selectedOrderId");
+	private Order editingOrder;
+
+	private List<OrderItem> removeList = new ArrayList<OrderItem>();
 
 	public void initialize(URL url, ResourceBundle rb){
 
@@ -107,7 +110,7 @@ public class AddEditOrderController extends BaseController implements Initializa
 		comboType.getSelectionModel().select(selectedType);
 
 		tblItems.getItems().addAll( order.getItems() );
-
+		this.editingOrder = order;
 	}
 
 	private void _fillAllProductsCombo(){
@@ -156,15 +159,23 @@ public class AddEditOrderController extends BaseController implements Initializa
             item.setProduct(product);
             item.setGroupVariant(variant);
 
+            item.setOrder(this.editingOrder); // Ensures saving of orderitem
+
 			tblItems.getItems().add(item);
 			comboProducts.getSelectionModel().selectFirst();
 			comboVariants.getItems().clear();
 		}
 	}
 
-	@FXML protected boolean save(ActionEvent event){
+	@FXML protected boolean save(){
 
 		Order order = new Order();
+
+		if( this.editingOrder == null){
+            order.setCreated( DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()) );
+        } else {
+		    order = this.editingOrder;
+        }
 
 		order.setName(fldName.getText());
 		order.setType( comboType.getSelectionModel().getSelectedItem().toLowerCase() );
@@ -175,11 +186,8 @@ public class AddEditOrderController extends BaseController implements Initializa
 		order.setComment( fldComment.getText() );
 		order.setItems(tblItems.getItems());
 
-		if(_orderId != null){
-			order.setId( Integer.parseInt(_orderId));
-		}
-
 		if( inventoryService.saveOrder(order) ){
+		    this.removeItems();
 			App.showPage("orders");
 		} else {
 			System.out.println("Can't save order!");
@@ -188,6 +196,12 @@ public class AddEditOrderController extends BaseController implements Initializa
 
 		return true;
 	}
+
+	private void removeItems(){
+	    for(OrderItem item : this.removeList){
+            inventoryService.removeOrderItem(item);
+        }
+    }
 
 	@FXML private void handleBack(){
 		App.showPage("orders");
@@ -199,6 +213,7 @@ public class AddEditOrderController extends BaseController implements Initializa
 
 		if(selectedItem != null) {
 			tblItems.getItems().removeAll(selectedItem);
+			this.removeList.add(selectedItem);
 		}
 	}
 

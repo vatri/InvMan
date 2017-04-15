@@ -102,7 +102,7 @@ public class Order {
         this.created = created;
     }
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<OrderItem> getItems() {
         return items;
     }

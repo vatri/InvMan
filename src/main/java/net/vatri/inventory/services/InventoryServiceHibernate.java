@@ -270,6 +270,19 @@ public class InventoryServiceHibernate implements InventoryService {
     }
 
     @Override
+    public void removeOrderItem(OrderItem orderItem) {
+        Session session = getSessionFactory().openSession();
+        session.beginTransaction();
+        try {
+            session.remove(orderItem);
+            session.getTransaction().commit();
+        } finally {
+            session.getTransaction().rollback(); // Needed ?
+            session.close();
+        }
+    }
+
+    @Override
     public List<StockModel> getStock() {
         String strQuery = "SELECT DISTINCT"
 				+ "	p.name as product_name "

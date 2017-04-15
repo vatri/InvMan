@@ -54,6 +54,11 @@ public class App extends Application{
 		showPage("login");
 	}
 
+	@Override
+	public void stop() throws Exception {
+		getInstance().sessionFactory.close();
+	}
+
 
 	public static void showPage(String page){
 

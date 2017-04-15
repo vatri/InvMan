@@ -74,13 +74,12 @@ public class InventoryServiceHibernate implements InventoryService {
         Session session = getSessionFactory().openSession();
         session.beginTransaction();
         try {
-//            if (id != null) {
-//                session.persist(entity);
-//            } else {
-//                session.merge(entity);
-//            }
-            // TODO: use JPA standard !
-            session.saveOrUpdate(entity);
+            if (id != null && id > 0) {
+                session.merge(entity);// Doesn't work for GroupVariants for existing group
+            } else {
+                session.persist(entity);
+            }
+//            session.saveOrUpdate(entity);
             session.getTransaction().commit();
             return true;
         } catch (HibernateException e){
@@ -139,11 +138,6 @@ public class InventoryServiceHibernate implements InventoryService {
     }
 
     @Override
-    public List<GroupVariant> getVariantsByGroup(String groupId) {
-        return null;
-    }
-
-    @Override
     public List<GroupVariant> getVariants() {
         return (List<GroupVariant>) this.list("GroupVariant");
     }
@@ -157,81 +151,7 @@ public class InventoryServiceHibernate implements InventoryService {
     public boolean saveVariant(GroupVariant variant) {
         return this.save(variant, variant.getId());
     }
-/*
-    @Override
-    public void loadGroupVariantsByString(ProductGroup group, String variants) {
 
-        Session session = getSessionFactory().openSession();
-//        todo - filter out variants used in orders as they probably shouldn't be deleted.
-//        String strQuery = "SELECT id, variant_name" +
-//                " FROM group_variants " +
-//                " WHERE id IN (" +
-//                    "SELECT distinct product_variant_id FROM order_items " +
-//                " )";
-//        List<Object[]> variantsInUse = session.getEntityManagerFactory()
-//                .createEntityManager()
-//                .createNativeQuery(strQuery)
-//                .getResultList();
-//        variantsInUse.stream().forEach(row -> {
-//            System.out.println( "VAR NAME: " + row );
-//        });
-        for(String varName : variants.split(",")){
-            varName = varName.trim();
-            if( varName.equals("") ){
-                continue;
-            }
-            GroupVariant groupVariant = new GroupVariant();
-            groupVariant.setVariantName(varName);
-            group.getGroupVariants().add(groupVariant);
-        }
-
-        session.close();
-//        group.getGroupVariants().clear();
-//
-//        for(String variantName : strVariants.split(",")){
-//            variantName = variantName.trim();
-//
-//            // Validate/filter
-//            if(variantName.length() < 1){
-//                System.out.println("Invalid variant > " + variantName);
-//                continue;
-//            }
-//            GroupVariant groupVariant = new GroupVariant();
-//            groupVariant.setVariantName(variantName);
-//            group.getGroupVariants().add(groupVariant);
-//        }
-//
-//
-//        return this.save(group, group.getId());
-    }
-
-    @Override
-    public String getGroupVariantsAsString(ProductGroup group){
-
-        // Make group Entity attached so that lazy loading works:
-        Session session = getSessionFactory().openSession();
-        try {
-            session.update(group);
-
-            List<GroupVariant> groupVariants = group.getGroupVariants();
-
-            if(groupVariants == null || groupVariants.size() < 1) {
-                return "";
-            }
-
-            String out = "";
-            for (GroupVariant gv : groupVariants) {
-                out += gv.getVariantName() + ",";
-            }
-            out = out.substring(0, out.length() - 1);
-
-            return out;
-        } finally {
-            System.out.println("Closing sessions... service / getGroupVariantsAsString");
-            session.close();
-        }
-    }
-*/
     @Override
     public List<Order> getOrders() {
         return (List<Order>) this.list("Order");
@@ -276,8 +196,9 @@ public class InventoryServiceHibernate implements InventoryService {
         try {
             session.remove(orderItem);
             session.getTransaction().commit();
-        } finally {
-            session.getTransaction().rollback(); // Needed ?
+        } catch (HibernateException e){
+            session.getTransaction().rollback();
+        } finally{
             session.close();
         }
     }

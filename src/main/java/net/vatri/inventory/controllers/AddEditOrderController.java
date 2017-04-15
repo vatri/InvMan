@@ -1,22 +1,20 @@
 package net.vatri.inventory.controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.scene.control.TableColumn;
 
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Label;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.control.cell.TextFieldTableCell;
 import net.vatri.inventory.App;
 import net.vatri.inventory.models.*;
 
@@ -58,38 +56,35 @@ public class AddEditOrderController extends BaseController implements Initializa
 
 		comboType.getItems().addAll("sell", "buy");
 
-		colProduct.setCellValueFactory( new PropertyValueFactory<>("product"));
+        tblItems.setEditable(true);
+
+        colProduct.setCellValueFactory( new PropertyValueFactory<>("product"));
 		colVariant.setCellValueFactory( new PropertyValueFactory<>("groupVariant"));
 		colPrice.setCellValueFactory( new PropertyValueFactory<>("price"));
+        colPrice.setCellFactory( TextFieldTableCell.<OrderItem>forTableColumn() );
 
-//		colPrice.setOnEditCommit(
-//                new EventHandler<TableColumn.CellEditEvent<OrderItem, TextField>>() {
-//                    @Override
-//                    public void handle(TableColumn.CellEditEvent<OrderItem, TextField> orderItemTextFieldCellEditEvent) {
-//
-//                    }
-//                }
-//        );
+        // LAMBA...
+//        colPrice.setOnEditCommit((TableColumn.CellEditEvent<OrderItem, String> t) -> {
+//            ((OrderItem) t.getTableView().getItems().get(
+//                    t.getTablePosition().getRow())
+//            ).setPrice(t.getNewValue());
+//        });
 
-//		tblItems.setEditable(true);
-//        colPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+        // No Lamba...
+        colPrice.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<OrderItem, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<OrderItem, String> t) {
+                ((OrderItem) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setPrice(t.getNewValue());
+            }
+        });
+
 //        colPrice.setEditable(true);
-
-//        emailCol.setOnEditCommit(
-//                new EventHandler<CellEditEvent<Person, String>>() {
-//                    @Override
-//                    public void handle(CellEditEvent<Person, String> t) {
-//                        ((Person) t.getTableView().getItems().get(
-//                                t.getTablePosition().getRow())
-//                        ).setEmail(t.getNewValue());
-//                    }
-//                }
-//        );
 
 		if(_orderId != null){
 			_loadOrderData(_orderId);	
 		}
-
 
 	}
 

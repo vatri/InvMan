@@ -14,6 +14,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AddEditGroupController extends BaseController implements Initializable{
@@ -62,6 +64,8 @@ public class AddEditGroupController extends BaseController implements Initializa
             ProductGroup group = new ProductGroup();
             if(_groupId != null && ! _groupId.equals("")){
                 group = inventoryService.getGroup(_groupId);
+            } else {
+                group.setCreated( DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())  );
             }
 
             group.setGroupName(fldName.getText());

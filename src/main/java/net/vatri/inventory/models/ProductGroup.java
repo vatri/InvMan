@@ -11,8 +11,8 @@ public class ProductGroup {
     private Integer id;
     private String groupName;
     private String price;
-
-    private String created;//Todo - Date type... @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
+    private String created;//Todo - Date type...
 
     private List<GroupVariant> groupVariants = new ArrayList<>();
 

@@ -46,6 +46,6 @@ pass: b
 ### PHASE 2
 
 - [ ] Unit tests
-- [ ] Use Hibernate ORM
+- [x] Use Hibernate ORM
 - [ ] Speed improvement
 - [ ] ???

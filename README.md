@@ -1,6 +1,12 @@
 # InvMan
 Simple JavaFX inventory management application.
 
+## MIT LICENCE
+
+https://opensource.org/licenses/MIT
+
+Totaly free to use, modify, sell, etc.
+
 ## FEATURES
 
 - Dashboard/stats

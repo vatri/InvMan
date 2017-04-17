@@ -63,24 +63,11 @@ public class AddEditOrderController extends BaseController implements Initializa
 		colPrice.setCellValueFactory( new PropertyValueFactory<>("price"));
         colPrice.setCellFactory( TextFieldTableCell.<OrderItem>forTableColumn() );
 
-        // LAMBA...
-//        colPrice.setOnEditCommit((TableColumn.CellEditEvent<OrderItem, String> t) -> {
-//            ((OrderItem) t.getTableView().getItems().get(
-//                    t.getTablePosition().getRow())
-//            ).setPrice(t.getNewValue());
-//        });
-
-        // No Lamba...
-        colPrice.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<OrderItem, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<OrderItem, String> t) {
-                ((OrderItem) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setPrice(t.getNewValue());
-            }
-        });
-
-//        colPrice.setEditable(true);
+		colPrice.setOnEditCommit((TableColumn.CellEditEvent<OrderItem, String> t) -> {
+			((OrderItem) t.getTableView().getItems()
+				.get(t.getTablePosition().getRow()))
+				.setPrice(t.getNewValue());
+		});
 
 		if(_orderId != null){
 			_loadOrderData(_orderId);	

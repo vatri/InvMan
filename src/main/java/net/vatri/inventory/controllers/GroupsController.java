@@ -40,8 +40,10 @@ public class GroupsController extends BaseController implements Initializable {
 
 	@FXML protected void openGroup(){
 		ProductGroup group = tblGroups.getSelectionModel().getSelectedItem();
-		App.getInstance().repository.put("selectedGroupId", group.getId().toString());
-		App.showPage("addEditGroup");
+		if(group != null){
+			App.getInstance().repository.put("selectedGroupId", group.getId().toString());
+			App.showPage("addEditGroup");
+		}
 	}
 
 	@FXML protected void handleAddGroup(){

@@ -1,21 +1,22 @@
 package net.vatri.inventory;
 
-//import net.vatri.inventory.controllers.*;
-
 import java.util.Map;
 import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-// import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class App extends Application{
 
-	private static BorderPane          mainPane = new BorderPane();
+    private static BorderPane          mainPane = new BorderPane();
 	private static Parent              mainMenu;
 	private static Map<String, String> _config;
 	static
@@ -34,6 +35,11 @@ public class App extends Application{
 	**/
 	private static App instance = null;
 
+	/**
+	* Hibernate session factory
+	**/
+	private SessionFactory sessionFactory = null;
+
 	@Override
 	public void start(Stage primaryStage){
 		
@@ -47,6 +53,12 @@ public class App extends Application{
 
 		showPage("login");
 	}
+
+	@Override
+	public void stop() throws Exception {
+		getInstance().sessionFactory.close();
+	}
+
 
 	public static void showPage(String page){
 
@@ -130,6 +142,23 @@ public class App extends Application{
 			instance = new App();
 		}
 		return instance;
+	}
+
+	public SessionFactory getSessionFactory(){
+		if(sessionFactory == null) {
+			final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+					.configure() // configures settings from hibernate.cfg.xml
+					.build();
+            try {
+                sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+			} catch (Exception e) {
+				// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+				// so destroy it manually.
+				StandardServiceRegistryBuilder.destroy(registry);
+				System.out.println(e.getMessage());
+			}
+		}
+		return sessionFactory;
 	}
 
 	public static void main(String[] args){

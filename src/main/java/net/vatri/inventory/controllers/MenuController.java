@@ -1,15 +1,14 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
+
+import net.vatri.inventory.App;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class MenuController{
-	
-    // @FXML protected void openProducts(ActionEvent event){
     @FXML protected void openProducts(ActionEvent event){
 		 	App.showPage("products");
     }
-    // @FXML protected void dashboardAction(ActionEvent event){
     @FXML protected void dashboardAction(ActionEvent event){
 			App.showPage("dashboard");
     }

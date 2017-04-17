@@ -1,36 +1,32 @@
-package net.vatri.inventory;
+package net.vatri.inventory.controllers;
+
+import javafx.scene.control.cell.PropertyValueFactory;
+import net.vatri.inventory.App;
+
+import net.vatri.inventory.models.GroupVariant;
+import net.vatri.inventory.models.ProductGroup;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.scene.control.TableColumn;
-
-import javafx.scene.control.Button;
-import javafx.event.ActionEvent;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
-import javafx.scene.control.ComboBox;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
 public class AddEditGroupController extends BaseController implements Initializable{
 
 	@FXML private TextField fldName;
     @FXML private TextField fldPrice;
-    @FXML private TextField fldVariants;
     @FXML private Label errorLabel;
     @FXML private Label savedLabel;
- //    @FXML private ComboBox<ProductGroupModel> groupCombo;
+    @FXML private TableView<GroupVariant> tblVariants;
+    @FXML private TableColumn<GroupVariant, String> colVariantName;
+    @FXML private TextField newVariantNameFld;
 
     // Based on this value, we know if this is adding or editing page...
 	private String _groupId = App.getInstance().repository.get("selectedGroupId");
@@ -44,12 +40,18 @@ public class AddEditGroupController extends BaseController implements Initializa
 
 	private void _loadGroupData(String groupId){
 		// System.out.println("Loading product " + productId);
-		ProductGroupModel group = new ProductGroupModel(groupId);
-		fldName.setText(group.getName());
+		ProductGroup group = inventoryService.getGroup(groupId);
+		fldName.setText(group.getGroupName());
 		fldPrice.setText(group.getPrice());
 		// fldVariants.setText(group.getVariantsAsString());
-		fldVariants.setText(group.getVariants());
+//		fldVariants.setText(inventoryService.getGroupVariantsAsString(group));
+        _loadGroupVariantsTable(group);
 	}
+
+	private void _loadGroupVariantsTable(ProductGroup group){
+        colVariantName.setCellValueFactory( new PropertyValueFactory<>("variantName"));
+        tblVariants.getItems().addAll(group.getGroupVariants());
+    }
 
 	@FXML protected boolean saveGroup(){
 
@@ -58,27 +60,31 @@ public class AddEditGroupController extends BaseController implements Initializa
 			return false;
 		} else {
 
-			// Set model data and save into database:
-			ProductGroupModel model = new ProductGroupModel();
+            // Set model data and save into database:
+            ProductGroup group = new ProductGroup();
+            if(_groupId != null && ! _groupId.equals("")){
+                group = inventoryService.getGroup(_groupId);
+            } else {
+                group.setCreated( DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())  );
+            }
 
-			model.setName(fldName.getText());
-			model.setPrice(fldPrice.getText());
+            group.setGroupName(fldName.getText());
+            group.setPrice(fldPrice.getText());
+            group.setGroupVariants( tblVariants.getItems() );
 
-			if(_groupId != null && ! _groupId.equals("")){
-				model.setId(_groupId);
-			}
+            // Required in order to save successfully by Hibernate...
+            for(GroupVariant gv : group.getGroupVariants()){
+                gv.setGroup(group);
+            }
 
-			model.setVariants(fldVariants.getText());
-
-			if(! model.save()){
-				errorLabel.setText("ERROR: can't save your form. Please contact IT support team!");
+			if(! inventoryService.saveGroup(group)){
+                errorLabel.setText("ERROR: can't save your form. Please contact IT support team!");
 				return false;
 			} else {
 
 				if(_groupId == null){
 					fldName.setText("");
 					fldPrice.setText("");
-					fldVariants.setText("");
 				}
 				savedLabel.setVisible(true);
 				errorLabel.setVisible(false);
@@ -93,5 +99,15 @@ public class AddEditGroupController extends BaseController implements Initializa
 	@FXML protected void handleBack(){
 		App.showPage("groups");
 	}
+
+	@FXML private void handleAddNewVariant(){
+        if(newVariantNameFld.getText().length() > 0){
+
+            GroupVariant groupVariant = new GroupVariant();
+            groupVariant.setVariantName(newVariantNameFld.getText());
+            tblVariants.getItems().add(groupVariant);
+            newVariantNameFld.setText("");
+        }
+    }
 }//class
 

@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.AddEditOrderController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.vatri.inventory.controllers.AddEditOrderController">
   <children>
     <Label layoutX="16.0" layoutY="14.0" text="Order">
       <font>
@@ -24,7 +24,7 @@
     <TextField fx:id="fldAddress" layoutX="100.0" layoutY="92.0" prefWidth="200.0" />
     <TextField fx:id="fldZip" layoutX="368.0" layoutY="92.0" prefWidth="200.0" />
     <Button fx:id="btnAdd" layoutX="393.0" layoutY="283.0" mnemonicParsing="false" onAction="#addProduct" text="Add" />
-    <Button fx:id="btnSave" layoutX="242.0" layoutY="534.0" mnemonicParsing="false" onAction="#save" prefHeight="39.0" prefWidth="104.0" style="" text="Save!">
+    <Button fx:id="btnSave" layoutX="244.0" layoutY="555.0" mnemonicParsing="false" onAction="#save" prefHeight="39.0" prefWidth="104.0" style="" text="Save!">
       <font>
         <Font size="18.0" />
       </font>
@@ -51,7 +51,7 @@
       </items>
     </ComboBox>
     <ComboBox fx:id="comboVariants" layoutX="228.0" layoutY="283.0" prefWidth="152.0" />
-    <TableView fx:id="tblItems" layoutX="16.0" layoutY="325.0" prefHeight="173.0" prefWidth="552.0">
+    <TableView fx:id="tblItems" layoutX="18.0" layoutY="346.0" prefHeight="173.0" prefWidth="552.0">
       <columns>
         <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="230.0" text="Product" fx:id="colProduct" />
         <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="187.0" text="Variant" fx:id="colVariant" />
@@ -63,7 +63,8 @@
     <Label layoutX="16.0" layoutY="261.0" text="Product" />
     <Label layoutX="228.0" layoutY="261.0" text="Variant" />
     <Hyperlink layoutX="128.0" layoutY="17.0" onAction="#handleBack" text="&lt; Back to list" textFill="#1400ff" />
-    <Button id="btnRemove" layoutX="433.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleRemove" text="Remove selected" />
+    <Button id="btnRemove" layoutX="435.0" layoutY="526.0" mnemonicParsing="false" onAction="#handleRemove" text="Remove selected" />
     <Separator layoutX="194.0" layoutY="244.0" prefWidth="200.0" />
+    <Label layoutX="374.0" layoutY="330.0" text="(double-click on price to edit.)" />
   </children>
 </AnchorPane>

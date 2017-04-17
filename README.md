@@ -1,5 +1,19 @@
 # InvMan
-Simple JavaFX inventory management application
+Simple JavaFX inventory management application.
+
+## FEATURES
+
+- Dashboard/stats
+- Manage products
+- Manage product groups
+- Manage product group variants
+- Manage orders
+- Sell and buy type of order
+- Stock preview
+
+## SCREENSHOTS
+
+See here: https://drive.google.com/drive/folders/0BxIbA3Gdn5AQa1ZMa2FHTlRPRms
 
 ## INSTALL
 

@@ -26,7 +26,7 @@
     <Label fx:id="errorLabel" font="$x1" layoutX="265.0" layoutY="214.0" text="Login failed!" textFill="RED" visible="false" />
     <Label focusTraversable="false" layoutY="14.0" opacity="1.0" prefWidth="460.0" text="Inventory Management" textAlignment="JUSTIFY" textFill="#008d96" underline="false" AnchorPane.leftAnchor="65.5" AnchorPane.rightAnchor="74.5">
       <font>
-        <Font name="System Bold Italic" size="33.0" />
+        <Font name="System Bold" size="33.0" />
       </font>
     </Label>
   </children>

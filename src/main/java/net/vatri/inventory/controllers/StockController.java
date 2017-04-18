@@ -16,10 +16,14 @@ import java.util.ResourceBundle;
 
 public class StockController extends BaseController implements Initializable {
 
-    @FXML private TableView<StockModel> tblStock;
-    @FXML private TableColumn<StockModel, String> colProduct;
-    @FXML private TableColumn<StockModel, String> colVariant;
-    @FXML private TableColumn<StockModel, String> colStock;
+    @FXML
+    private TableView<StockModel> tblStock;
+    @FXML
+    private TableColumn<StockModel, String> colProduct;
+    @FXML
+    private TableColumn<StockModel, String> colVariant;
+    @FXML
+    private TableColumn<StockModel, String> colStock;
 
     public void initialize(URL url, ResourceBundle rb) {
 

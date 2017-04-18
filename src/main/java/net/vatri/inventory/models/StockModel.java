@@ -6,7 +6,7 @@ public class StockModel {
     public String variant_name = "";
     public String stock = "0";
 
-    public StockModel(String product_name, String variant_name, String stock){
+    public StockModel(String product_name, String variant_name, String stock) {
         this.setProductName(product_name);
         this.setVariantName(variant_name);
         this.setStock(stock);
@@ -32,5 +32,7 @@ public class StockModel {
         return stock;
     }
 
-    public void setStock(String stock) { this.stock = stock; }
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
 }

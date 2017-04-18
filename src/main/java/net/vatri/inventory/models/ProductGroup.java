@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="product_groups")
+@Table(name = "product_groups")
 public class ProductGroup {
 
     private Integer id;
@@ -20,6 +20,7 @@ public class ProductGroup {
     public List<GroupVariant> getGroupVariants() {
         return groupVariants;
     }
+
     public void setGroupVariants(List<GroupVariant> groupVariants) {
         this.groupVariants = groupVariants;
     }
@@ -34,7 +35,7 @@ public class ProductGroup {
         this.id = id;
     }
 
-    @Column(name="group_name")
+    @Column(name = "group_name")
     public String getGroupName() {
         return groupName;
     }
@@ -59,7 +60,7 @@ public class ProductGroup {
         this.created = created;
     }
 
-    public String toString(){
+    public String toString() {
         return getGroupName();
     }
 }

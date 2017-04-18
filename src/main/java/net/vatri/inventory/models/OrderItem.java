@@ -3,7 +3,7 @@ package net.vatri.inventory.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="order_items")
+@Table(name = "order_items")
 public class OrderItem {
 
     private Integer id;
@@ -32,7 +32,7 @@ public class OrderItem {
     }
 
     @ManyToOne
-    @JoinColumn(name="order_id")
+    @JoinColumn(name = "order_id")
     public Order getOrder() {
         return order;
     }
@@ -42,16 +42,17 @@ public class OrderItem {
     }
 
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     public Product getProduct() {
         return product;
     }
+
     public void setProduct(Product product) {
         this.product = product;
     }
 
     @ManyToOne
-    @JoinColumn(name="product_variant_id")
+    @JoinColumn(name = "product_variant_id")
     public GroupVariant getGroupVariant() {
         return groupVariant;
     }

@@ -48,7 +48,7 @@ public class Product {
     }
 
     @ManyToOne
-    @JoinColumn(name="group_id")
+    @JoinColumn(name = "group_id")
     public ProductGroup getGroup() {
         return group;
     }
@@ -57,7 +57,7 @@ public class Product {
         this.group = group;
     }
 
-    public String toString(){
+    public String toString() {
         return getName();
     }
 

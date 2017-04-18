@@ -18,185 +18,205 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import net.vatri.inventory.App;
 import net.vatri.inventory.models.*;
 
-public class AddEditOrderController extends BaseController implements Initializable{
+public class AddEditOrderController extends BaseController implements Initializable {
 
-	private static final String STATUS_IN_PROGRESS = "in-progress";
-	private static final String STATUS_COMPLETED = "completed";
+    private static final String STATUS_IN_PROGRESS = "in-progress";
+    private static final String STATUS_COMPLETED = "completed";
 
 
-	@FXML private TextField fldName;
-    @FXML private TextField fldCity;
-    @FXML private TextField fldAddress;
-    @FXML private TextField fldZip;
-    @FXML private TextArea fldComment;
-    @FXML private ComboBox<String> comboStatus;
-    @FXML private ComboBox<String> comboType;
+    @FXML
+    private TextField fldName;
+    @FXML
+    private TextField fldCity;
+    @FXML
+    private TextField fldAddress;
+    @FXML
+    private TextField fldZip;
+    @FXML
+    private TextArea fldComment;
+    @FXML
+    private ComboBox<String> comboStatus;
+    @FXML
+    private ComboBox<String> comboType;
 
-    @FXML private ComboBox<Product> comboProducts;
-    @FXML private ComboBox<GroupVariant> comboVariants;
+    @FXML
+    private ComboBox<Product> comboProducts;
+    @FXML
+    private ComboBox<GroupVariant> comboVariants;
 
-    @FXML private TableView<OrderItem> tblItems;
-    @FXML private TableColumn<Product, String> colProduct;
-    @FXML private TableColumn<GroupVariant, String> colVariant;
-    @FXML private TableColumn<OrderItem, String> colPrice;
+    @FXML
+    private TableView<OrderItem> tblItems;
+    @FXML
+    private TableColumn<Product, String> colProduct;
+    @FXML
+    private TableColumn<GroupVariant, String> colVariant;
+    @FXML
+    private TableColumn<OrderItem, String> colPrice;
 
-    @FXML private Label errorLabel;
-    @FXML private Label savedLabel;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private Label savedLabel;
 
     // Based on this value, we know if this is adding or editing page...
-	private String _orderId = App.getInstance().repository.get("selectedOrderId");
-	private Order editingOrder;
+    private String _orderId = App.getInstance().repository.get("selectedOrderId");
+    private Order editingOrder;
 
-	private List<OrderItem> removeList = new ArrayList<OrderItem>();
+    private List<OrderItem> removeList = new ArrayList<OrderItem>();
 
-	public void initialize(URL url, ResourceBundle rb){
+    public void initialize(URL url, ResourceBundle rb) {
 
-		_fillAllProductsCombo();
-		comboStatus.getItems().addAll(STATUS_IN_PROGRESS, STATUS_COMPLETED);
+        _fillAllProductsCombo();
+        comboStatus.getItems().addAll(STATUS_IN_PROGRESS, STATUS_COMPLETED);
 
-		comboType.getItems().addAll("sell", "buy");
+        comboType.getItems().addAll("sell", "buy");
 
         tblItems.setEditable(true);
 
-        colProduct.setCellValueFactory( new PropertyValueFactory<>("product"));
-		colVariant.setCellValueFactory( new PropertyValueFactory<>("groupVariant"));
-		colPrice.setCellValueFactory( new PropertyValueFactory<>("price"));
-        colPrice.setCellFactory( TextFieldTableCell.<OrderItem>forTableColumn() );
+        colProduct.setCellValueFactory(new PropertyValueFactory<>("product"));
+        colVariant.setCellValueFactory(new PropertyValueFactory<>("groupVariant"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colPrice.setCellFactory(TextFieldTableCell.<OrderItem>forTableColumn());
 
-		colPrice.setOnEditCommit((TableColumn.CellEditEvent<OrderItem, String> t) -> {
-			((OrderItem) t.getTableView().getItems()
-				.get(t.getTablePosition().getRow()))
-				.setPrice(t.getNewValue());
-		});
+        colPrice.setOnEditCommit((TableColumn.CellEditEvent<OrderItem, String> t) -> {
+            ((OrderItem) t.getTableView().getItems()
+                    .get(t.getTablePosition().getRow()))
+                    .setPrice(t.getNewValue());
+        });
 
-		if(_orderId != null){
-			_loadOrderData(_orderId);	
-		}
+        if (_orderId != null) {
+            _loadOrderData(_orderId);
+        }
 
-	}
+    }
 
-	private void _loadOrderData(String orderId){
+    private void _loadOrderData(String orderId) {
 
-		Order order = inventoryService.getOrder(orderId);
+        Order order = inventoryService.getOrder(orderId);
 
-		fldName.setText( order.getName());
-		fldCity.setText( order.getCity());
-		fldAddress.setText( order.getAddress());
-		fldZip.setText( order.getZip());
-		fldComment.setText( order.getComment());
+        fldName.setText(order.getName());
+        fldCity.setText(order.getCity());
+        fldAddress.setText(order.getAddress());
+        fldZip.setText(order.getZip());
+        fldComment.setText(order.getComment());
 
-		comboStatus.getSelectionModel().select(order.getStatus());
+        comboStatus.getSelectionModel().select(order.getStatus());
 
-		String selectedType = order.getType().equals("buy") ? "Buy" : "Sell";
+        String selectedType = order.getType().equals("buy") ? "Buy" : "Sell";
 
-		comboType.getSelectionModel().select(selectedType);
+        comboType.getSelectionModel().select(selectedType);
 
-		tblItems.getItems().addAll( order.getItems() );
-		this.editingOrder = order;
-	}
+        tblItems.getItems().addAll(order.getItems());
+        this.editingOrder = order;
+    }
 
-	private void _fillAllProductsCombo(){
-		comboProducts.getItems().addAll(
-				inventoryService.getProducts()
-		);
-		comboProducts.getSelectionModel().selectFirst();
-	}
+    private void _fillAllProductsCombo() {
+        comboProducts.getItems().addAll(
+                inventoryService.getProducts()
+        );
+        comboProducts.getSelectionModel().selectFirst();
+    }
 
-	private void _fillVariantsCombo(Product product){
+    private void _fillVariantsCombo(Product product) {
 
-		ProductGroup group = product.getGroup();
- 		comboVariants.getItems().clear();
-		comboVariants.getItems().addAll(
-				group.getGroupVariants()
-		);
-		comboVariants.getSelectionModel().selectFirst();
-	}
+        ProductGroup group = product.getGroup();
+        comboVariants.getItems().clear();
+        comboVariants.getItems().addAll(
+                group.getGroupVariants()
+        );
+        comboVariants.getSelectionModel().selectFirst();
+    }
 
-	// Fired when product in the combo is selected:
-	@FXML private void productSelected(){
-		if( comboProducts.getSelectionModel().getSelectedItem() instanceof Product == false){
-			System.out.println("Value in product combo is not Product model");
-			return ;
-		}
+    // Fired when product in the combo is selected:
+    @FXML
+    private void productSelected() {
+        if (comboProducts.getSelectionModel().getSelectedItem() instanceof Product == false) {
+            System.out.println("Value in product combo is not Product model");
+            return;
+        }
         Product selectedProduct = comboProducts.getSelectionModel().getSelectedItem();
 
-		_fillVariantsCombo(selectedProduct);
-	}
+        _fillVariantsCombo(selectedProduct);
+    }
 
-	// Fired when Add button is clicked
-	@FXML private void addProduct(){
+    // Fired when Add button is clicked
+    @FXML
+    private void addProduct() {
 
-		// If no product is selected, just skip this action
-		if( comboProducts.getSelectionModel().getSelectedItem() instanceof Product == false){
-			System.out.println("Value in product combo is not Product model");
-			return ;
-		}
+        // If no product is selected, just skip this action
+        if (comboProducts.getSelectionModel().getSelectedItem() instanceof Product == false) {
+            System.out.println("Value in product combo is not Product model");
+            return;
+        }
 
-		Product product      = comboProducts.getSelectionModel().getSelectedItem();
-		GroupVariant variant = comboVariants.getSelectionModel().getSelectedItem();
+        Product product = comboProducts.getSelectionModel().getSelectedItem();
+        GroupVariant variant = comboVariants.getSelectionModel().getSelectedItem();
 
-		if( product != null){
-		    OrderItem item = new OrderItem();
+        if (product != null) {
+            OrderItem item = new OrderItem();
 
             item.setProduct(product);
             item.setGroupVariant(variant);
 
             item.setOrder(this.editingOrder); // Ensures saving of orderitem
 
-			tblItems.getItems().add(item);
-			comboProducts.getSelectionModel().selectFirst();
-			comboVariants.getItems().clear();
-		}
-	}
+            tblItems.getItems().add(item);
+            comboProducts.getSelectionModel().selectFirst();
+            comboVariants.getItems().clear();
+        }
+    }
 
-	@FXML protected boolean save(){
+    @FXML
+    protected boolean save() {
 
-		Order order = new Order();
+        Order order = new Order();
 
-		if( this.editingOrder == null){
-            order.setCreated( DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()) );
+        if (this.editingOrder == null) {
+            order.setCreated(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now()));
         } else {
-		    order = this.editingOrder;
+            order = this.editingOrder;
         }
 
-		order.setName(fldName.getText());
-		order.setType( comboType.getSelectionModel().getSelectedItem().toLowerCase() );
-		order.setAddress(fldAddress.getText());
-		order.setCity(fldCity.getText());
-		order.setZip(fldZip.getText());
-		order.setStatus( comboStatus.getSelectionModel().getSelectedItem() );
-		order.setComment( fldComment.getText() );
-		order.setItems(tblItems.getItems());
+        order.setName(fldName.getText());
+        order.setType(comboType.getSelectionModel().getSelectedItem().toLowerCase());
+        order.setAddress(fldAddress.getText());
+        order.setCity(fldCity.getText());
+        order.setZip(fldZip.getText());
+        order.setStatus(comboStatus.getSelectionModel().getSelectedItem());
+        order.setComment(fldComment.getText());
+        order.setItems(tblItems.getItems());
 
-		if( inventoryService.saveOrder(order) ){
-		    this.removeItems();
-			App.showPage("orders");
-		} else {
-			System.out.println("Can't save order!");
-			errorLabel.setVisible(true);
-		}
+        if (inventoryService.saveOrder(order)) {
+            this.removeItems();
+            App.showPage("orders");
+        } else {
+            System.out.println("Can't save order!");
+            errorLabel.setVisible(true);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private void removeItems(){
-	    for(OrderItem item : this.removeList){
+    private void removeItems() {
+        for (OrderItem item : this.removeList) {
             inventoryService.removeOrderItem(item);
         }
     }
 
-	@FXML private void handleBack(){
-		App.showPage("orders");
-	}
+    @FXML
+    private void handleBack() {
+        App.showPage("orders");
+    }
 
-	@FXML private void handleRemove(){
+    @FXML
+    private void handleRemove() {
 
-		OrderItem selectedItem = tblItems.getSelectionModel().getSelectedItem();
+        OrderItem selectedItem = tblItems.getSelectionModel().getSelectedItem();
 
-		if(selectedItem != null) {
-			tblItems.getItems().removeAll(selectedItem);
-			this.removeList.add(selectedItem);
-		}
-	}
+        if (selectedItem != null) {
+            tblItems.getItems().removeAll(selectedItem);
+            this.removeList.add(selectedItem);
+        }
+    }
 
 }//class

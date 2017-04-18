@@ -3,7 +3,7 @@ package net.vatri.inventory.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     private Integer id;
@@ -48,7 +48,7 @@ public class User {
         this.password = password;
     }
 
-    @Column(name="access_token")
+    @Column(name = "access_token")
     public String getAccessToken() {
         return accessToken;
     }

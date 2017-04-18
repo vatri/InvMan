@@ -22,15 +22,21 @@ public class DashboardController extends BaseController implements Initializable
 
 //    private InventoryDao dao = new InventoryDaoImpl( new JdbcQueryBuilder(App.getConfig("db_connection")) );
 
-    @FXML private Label   productsNumber;
-    @FXML private Label   groupsNumber;
-    @FXML private Label   ordersNumber;
+    @FXML
+    private Label productsNumber;
+    @FXML
+    private Label groupsNumber;
+    @FXML
+    private Label ordersNumber;
 
-    @FXML private BarChart<String,Number> ordersChart;
-    @FXML private CategoryAxis  x;
-    @FXML private NumberAxis    y;
+    @FXML
+    private BarChart<String, Number> ordersChart;
+    @FXML
+    private CategoryAxis x;
+    @FXML
+    private NumberAxis y;
 
-    private Map<String,String> stats = inventoryService.getStats();
+    private Map<String, String> stats = inventoryService.getStats();
 
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -42,29 +48,29 @@ public class DashboardController extends BaseController implements Initializable
 
     }
 
-    private void _createBarChart(){
+    private void _createBarChart() {
 
-        Integer month1 = Integer.parseInt( stats.get("orders1") );
-        Integer month2 = Integer.parseInt( stats.get("orders2") );
-        Integer month3 = Integer.parseInt( stats.get("orders3") );
-        Integer month4 = Integer.parseInt( stats.get("orders4") );
+        Integer month1 = Integer.parseInt(stats.get("orders1"));
+        Integer month2 = Integer.parseInt(stats.get("orders2"));
+        Integer month3 = Integer.parseInt(stats.get("orders3"));
+        Integer month4 = Integer.parseInt(stats.get("orders4"));
 
-        XYChart.Series<String,Number> dataSet1 = new XYChart.Series<String,Number>();
+        XYChart.Series<String, Number> dataSet1 = new XYChart.Series<String, Number>();
         dataSet1.getData().addAll(
-                new XYChart.Data<String,Number>(_getRecentMonthName(3), month1)
-                ,new XYChart.Data<String,Number>(_getRecentMonthName(2), month2)
-                ,new XYChart.Data<String,Number>(_getRecentMonthName(1), month3)
-                ,new XYChart.Data<String,Number>(_getRecentMonthName(0), month4)
+                new XYChart.Data<String, Number>(_getRecentMonthName(3), month1)
+                , new XYChart.Data<String, Number>(_getRecentMonthName(2), month2)
+                , new XYChart.Data<String, Number>(_getRecentMonthName(1), month3)
+                , new XYChart.Data<String, Number>(_getRecentMonthName(0), month4)
         );
 
         ordersChart.getData().addAll(dataSet1);
     }
 
-    private String _getRecentMonthName(int minusMonths){
+    private String _getRecentMonthName(int minusMonths) {
 
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MMM"); // MMM = Jan,Feb...
 
-        return  formatter.print(LocalDate.now().minusMonths(minusMonths) );
+        return formatter.print(LocalDate.now().minusMonths(minusMonths));
     }
 
 

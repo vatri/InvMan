@@ -3,7 +3,7 @@ package net.vatri.inventory.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name="group_variants")
+@Table(name = "group_variants")
 public class GroupVariant {
 
     private Integer id;
@@ -20,7 +20,7 @@ public class GroupVariant {
         this.id = id;
     }
 
-    @Column(name="variant_name")
+    @Column(name = "variant_name")
     public String getVariantName() {
         return variantName;
     }
@@ -38,7 +38,7 @@ public class GroupVariant {
         this.group = group;
     }
 
-    public String toString(){
+    public String toString() {
         return getVariantName();
     }
 }

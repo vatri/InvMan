@@ -14,154 +14,154 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class App extends Application{
+public class App extends Application {
 
-    private static BorderPane          mainPane = new BorderPane();
-	private static Parent              mainMenu;
-	private static Map<String, String> _config;
-	static
-    {
+    private static BorderPane mainPane = new BorderPane();
+    private static Parent mainMenu;
+    private static Map<String, String> _config;
+
+    static {
         _config = new HashMap<String, String>();
         _config.put("db_connection", "jdbc:sqlite:InvMan.sqlite3");
     }
 
     /**
-    * Data repository for exchange between controllers.
-    **/
-    public Map<String,String>         repository = new HashMap<String,String>();
+     * Data repository for exchange between controllers.
+     **/
+    public Map<String, String> repository = new HashMap<String, String>();
 
     /**
-    * Variable for the singleton pattern... 
-	**/
-	private static App instance = null;
+     * Variable for the singleton pattern...
+     **/
+    private static App instance = null;
 
-	/**
-	* Hibernate session factory
-	**/
-	private SessionFactory sessionFactory = null;
+    /**
+     * Hibernate session factory
+     **/
+    private SessionFactory sessionFactory = null;
 
-	@Override
-	public void start(Stage primaryStage){
-		
-		mainMenu = getView("Menu");
+    @Override
+    public void start(Stage primaryStage) {
 
-		mainPane.setLeft(mainMenu);
+        mainMenu = getView("Menu");
 
-		primaryStage.setScene(new Scene(mainPane, 800,600));
-		primaryStage.setTitle("BeeInventory - Inventory Management");
-		primaryStage.show();
+        mainPane.setLeft(mainMenu);
 
-		showPage("login");
-	}
+        primaryStage.setScene(new Scene(mainPane, 800, 600));
+        primaryStage.setTitle("BeeInventory - Inventory Management");
+        primaryStage.show();
 
-	@Override
-	public void stop() throws Exception {
-		getInstance().sessionFactory.close();
-	}
+        showPage("login");
+    }
 
-
-	public static void showPage(String page){
-
-		System.out.println("Showing page:" + page);
-
-		String viewFile;
-
-		switch(page){
-
-			case "dashboard":
-				viewFile = "DashBoardView";
-				mainMenu.setVisible(true);
-				break;
-
-			case "products":
-				viewFile = "ProductsView";
-				break;
-			// TODO: change to addEditController
-			case "newProduct":
-				viewFile = "AddEditProductView";
-				break;
-
-			case "groups":
-				viewFile = "GroupsView";
-				break;
-
-			case "addEditGroup":
-				viewFile = "AddEditGroupView";
-				break;
-			case "orders":
-				viewFile = "OrdersView";
-				break;
-
-			case "addEditOrder":
-				viewFile = "AddEditOrderView";
-				break;
-
-			case "stock":
-				viewFile = "StockView";
-				break;
-
-			default:
-			case "login":
-				viewFile = "LoginView";
-				mainMenu.setVisible(false);
-				break;
-		}
-
-		mainPane.setCenter(getView(viewFile));
-	}
-
-	/**
-	* Load JavaFX (fxml) view file
-	**/
-	public static Parent getView(String viewFile){
-		Parent activeElement = null;
-		try{
+    @Override
+    public void stop() throws Exception {
+        getInstance().sessionFactory.close();
+    }
 
 
-			String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
-			java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
-			activeElement = FXMLLoader.load(viewRes);
+    public static void showPage(String page) {
 
-		} catch(Exception e){
-			System.out.println(e.getCause());
-			// System.out.println(e.printStackTrace());	
-			e.printStackTrace();
-		}
-		return activeElement;
-	}
+        System.out.println("Showing page:" + page);
 
-	public static String getConfig(String item){
-		return _config.get(item);
-	}
+        String viewFile;
 
-	/**
-	* Return signleton instance...
-	**/
-	public static App getInstance() {
-		if(instance == null) {
-			instance = new App();
-		}
-		return instance;
-	}
+        switch (page) {
 
-	public SessionFactory getSessionFactory(){
-		if(sessionFactory == null) {
-			final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-					.configure() // configures settings from hibernate.cfg.xml
-					.build();
+            case "dashboard":
+                viewFile = "DashBoardView";
+                mainMenu.setVisible(true);
+                break;
+
+            case "products":
+                viewFile = "ProductsView";
+                break;
+            // TODO: change to addEditController
+            case "newProduct":
+                viewFile = "AddEditProductView";
+                break;
+
+            case "groups":
+                viewFile = "GroupsView";
+                break;
+
+            case "addEditGroup":
+                viewFile = "AddEditGroupView";
+                break;
+            case "orders":
+                viewFile = "OrdersView";
+                break;
+
+            case "addEditOrder":
+                viewFile = "AddEditOrderView";
+                break;
+
+            case "stock":
+                viewFile = "StockView";
+                break;
+
+            default:
+            case "login":
+                viewFile = "LoginView";
+                mainMenu.setVisible(false);
+                break;
+        }
+
+        mainPane.setCenter(getView(viewFile));
+    }
+
+    /**
+     * Load JavaFX (fxml) view file
+     **/
+    public static Parent getView(String viewFile) {
+        Parent activeElement = null;
+        try {
+
+
+            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
+            java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
+            activeElement = FXMLLoader.load(viewRes);
+
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+            // System.out.println(e.printStackTrace());
+            e.printStackTrace();
+        }
+        return activeElement;
+    }
+
+    public static String getConfig(String item) {
+        return _config.get(item);
+    }
+
+    /**
+     * Return signleton instance...
+     **/
+    public static App getInstance() {
+        if (instance == null) {
+            instance = new App();
+        }
+        return instance;
+    }
+
+    public SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                    .configure() // configures settings from hibernate.cfg.xml
+                    .build();
             try {
                 sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-			} catch (Exception e) {
-				// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-				// so destroy it manually.
-				StandardServiceRegistryBuilder.destroy(registry);
-				System.out.println(e.getMessage());
-			}
-		}
-		return sessionFactory;
-	}
+            } catch (Exception e) {
+                // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+                // so destroy it manually.
+                StandardServiceRegistryBuilder.destroy(registry);
+                System.out.println(e.getMessage());
+            }
+        }
+        return sessionFactory;
+    }
 
-	public static void main(String[] args){
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

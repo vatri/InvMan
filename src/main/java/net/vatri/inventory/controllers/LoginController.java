@@ -9,18 +9,22 @@ import net.vatri.inventory.App;
 import net.vatri.inventory.models.User;
 
 
-public class LoginController extends BaseController{
+public class LoginController extends BaseController {
 
-    @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
-    @FXML private Label errorLabel;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Label errorLabel;
 
-    @FXML protected void btnLoginPressed(ActionEvent event) {
-    	User user = inventoryService.getUserByEmail(emailField.getText());
-		if(user.getPassword().equals(passwordField.getText() ) ){
-			App.showPage("dashboard");
-		} else {
-			errorLabel.setVisible(true);
-		}
+    @FXML
+    protected void btnLoginPressed(ActionEvent event) {
+        User user = inventoryService.getUserByEmail(emailField.getText());
+        if (user.getPassword().equals(passwordField.getText())) {
+            App.showPage("dashboard");
+        } else {
+            errorLabel.setVisible(true);
+        }
     }
 }

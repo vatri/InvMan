@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
     private Integer id;
     private String name;
@@ -77,7 +77,7 @@ public class Order {
         this.comment = comment;
     }
 
-    @Column(name="total_price")
+    @Column(name = "total_price")
     public String getTotalPrice() {
         return totalPrice;
     }

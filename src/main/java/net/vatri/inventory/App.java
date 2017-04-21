@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
-import javafx.fxml.FXMLLoader;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -40,10 +39,14 @@ public class App extends Application {
      **/
     private SessionFactory sessionFactory = null;
 
+    private FxPageSwitcher pageSwitcher = new FxPageSwitcher(mainPane);
+
     @Override
     public void start(Stage primaryStage) {
 
-        mainMenu = getView("Menu");
+//        mainMenu = getView("Menu");
+        mainMenu = new FxView("Menu").get();
+        mainMenu.setVisible(false);
 
         mainPane.setLeft(mainMenu);
 
@@ -51,7 +54,8 @@ public class App extends Application {
         primaryStage.setTitle("BeeInventory - Inventory Management");
         primaryStage.show();
 
-        showPage("login");
+//        showPage("login");
+        pageSwitcher.showPage("login");
     }
 
     @Override
@@ -59,75 +63,11 @@ public class App extends Application {
         getInstance().sessionFactory.close();
     }
 
-
-    public static void showPage(String page) {
-
-        System.out.println("Showing page:" + page);
-
-        String viewFile;
-
-        switch (page) {
-
-            case "dashboard":
-                viewFile = "DashBoardView";
-                mainMenu.setVisible(true);
-                break;
-
-            case "products":
-                viewFile = "ProductsView";
-                break;
-            // TODO: change to addEditController
-            case "newProduct":
-                viewFile = "AddEditProductView";
-                break;
-
-            case "groups":
-                viewFile = "GroupsView";
-                break;
-
-            case "addEditGroup":
-                viewFile = "AddEditGroupView";
-                break;
-            case "orders":
-                viewFile = "OrdersView";
-                break;
-
-            case "addEditOrder":
-                viewFile = "AddEditOrderView";
-                break;
-
-            case "stock":
-                viewFile = "StockView";
-                break;
-
-            default:
-            case "login":
-                viewFile = "LoginView";
-                mainMenu.setVisible(false);
-                break;
+    public static void showPage(String page){
+        if(page != "login"){
+            mainMenu.setVisible(true);
         }
-
-        mainPane.setCenter(getView(viewFile));
-    }
-
-    /**
-     * Load JavaFX (fxml) view file
-     **/
-    public static Parent getView(String viewFile) {
-        Parent activeElement = null;
-        try {
-
-
-            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
-            java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
-            activeElement = FXMLLoader.load(viewRes);
-
-        } catch (Exception e) {
-            System.out.println(e.getCause());
-            // System.out.println(e.printStackTrace());
-            e.printStackTrace();
-        }
-        return activeElement;
+        getInstance().pageSwitcher.showPage(page);
     }
 
     public static String getConfig(String item) {

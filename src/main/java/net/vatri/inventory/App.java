@@ -1,5 +1,6 @@
 package net.vatri.inventory;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -39,23 +40,33 @@ public class App extends Application {
      **/
     private SessionFactory sessionFactory = null;
 
-    private FxPageSwitcher pageSwitcher = new FxPageSwitcher(mainPane);
+    private FxPageSwitcher pageSwitcher;
 
     @Override
     public void start(Stage primaryStage) {
 
-//        mainMenu = getView("Menu");
+        getInstance().pageSwitcher = new FxPageSwitcher(mainPane, Arrays.asList(
+            new FxPage("login", "LoginView"),
+            new FxPage("dashboard", "DashBoardView"),
+            new FxPage("products", "ProductsView"),
+            new FxPage("newProduct", "AddEditProductView"),
+            new FxPage("groups", "GroupsView"),
+            new FxPage("addEditGroup", "AddEditGroupView"),
+            new FxPage("orders", "OrdersView"),
+            new FxPage("addEditOrder", "AddEditOrderView"),
+            new FxPage("stock", "StockView")
+        ));
+
         mainMenu = new FxView("Menu").get();
         mainMenu.setVisible(false);
 
         mainPane.setLeft(mainMenu);
 
         primaryStage.setScene(new Scene(mainPane, 800, 600));
-        primaryStage.setTitle("BeeInventory - Inventory Management");
+        primaryStage.setTitle("Inventory Management");
         primaryStage.show();
 
-//        showPage("login");
-        pageSwitcher.showPage("login");
+        getInstance().pageSwitcher.showPage("login");
     }
 
     @Override

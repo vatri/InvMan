@@ -11,15 +11,14 @@ public class FxView extends Pane {
 
         try {
 
-
             String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
             java.net.URL viewRes = new java.net.URL("file://" + viewPath + fileName + ".fxml");
             fxElement = FXMLLoader.load(viewRes);
 
         } catch (Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
             // System.out.println(e.printStackTrace());
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

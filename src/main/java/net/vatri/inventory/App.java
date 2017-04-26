@@ -18,7 +18,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class App extends Application {
 
-    private static IMainPane mainPane = new MainPane();
+    private static BorderPane mainPane = new BorderPane();
     private static Parent mainMenu;
     private static Map<String, String> _config;
 
@@ -47,7 +47,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        getInstance().pageSwitcher = new FxPageSwitcher(mainPane, Arrays.asList(
+        getInstance().pageSwitcher = new FxPageSwitcher((MainPane)mainPane, Arrays.asList(
             new FxPage("login", "LoginView"),
             new FxPage("dashboard", "DashBoardView"),
             new FxPage("products", "ProductsView"),

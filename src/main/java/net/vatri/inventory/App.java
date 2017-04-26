@@ -47,7 +47,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        getInstance().pageSwitcher = new FxPageSwitcher((n) -> mainPane.setCenter(n), Arrays.asList(
+        getInstance().pageSwitcher = new FxPageSwitcher((node) -> mainPane.setCenter(node), Arrays.asList(
             new FxPage("login", "LoginView"),
             new FxPage("dashboard", "DashBoardView"),
             new FxPage("products", "ProductsView"),

@@ -14,6 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import net.vatri.inventory.App;
+import net.vatri.inventory.libs.BaseController;
 import net.vatri.inventory.models.Order;
 
 import java.util.Map;

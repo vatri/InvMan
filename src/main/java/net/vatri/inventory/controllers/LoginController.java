@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import net.vatri.inventory.App;
+import net.vatri.inventory.libs.BaseController;
 import net.vatri.inventory.models.User;
 
 

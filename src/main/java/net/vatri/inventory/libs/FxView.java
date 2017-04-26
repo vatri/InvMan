@@ -1,4 +1,4 @@
-package net.vatri.inventory;
+package net.vatri.inventory.libs;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;

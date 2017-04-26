@@ -1,4 +1,4 @@
-package net.vatri.inventory;
+package net.vatri.inventory.libs;
 
 public class FxPage{
 

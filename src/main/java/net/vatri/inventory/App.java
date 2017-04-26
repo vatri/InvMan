@@ -1,5 +1,7 @@
 package net.vatri.inventory;
 
+import net.vatri.inventory.libs.*;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class App extends Application {
 
-    private static BorderPane mainPane = new BorderPane();
+    private static IMainPane mainPane = new MainPane();
     private static Parent mainMenu;
     private static Map<String, String> _config;
 

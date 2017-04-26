@@ -1,8 +1,6 @@
-package net.vatri.inventory;
+package net.vatri.inventory.libs;
 
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-
 import java.util.List;
 
 public class FxPageSwitcher{
@@ -11,9 +9,9 @@ public class FxPageSwitcher{
 
 	private String currentPage;
 
-	private BorderPane pane;
+	private IMainPane pane;
 
-	public FxPageSwitcher(BorderPane pane, List<FxPage> pages){
+	public FxPageSwitcher(IMainPane pane, List<FxPage> pages){
 	    this.pane = pane;
 	    this.pages = pages;
     }

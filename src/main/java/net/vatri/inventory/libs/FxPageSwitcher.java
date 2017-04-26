@@ -30,7 +30,7 @@ public class FxPageSwitcher{
             }
             String viewFile = selectedPage.getPageFile();
             Pane view = new FxView(viewFile).get();
-            pane.setCenter(view);
+            pane.setPage(view);
         } catch (Exception e){
 	        System.out.println("No page " + page + " please check FxPageSwitcher.");
         }

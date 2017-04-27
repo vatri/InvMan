@@ -1,5 +1,6 @@
 package net.vatri.inventory;
 
+import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -118,7 +119,15 @@ public class App extends Application {
         try {
 
 
-            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
+//            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
+
+            String viewPath = new StringBuilder(System.getProperty("user.dir"))
+                    .append(File.separator).append("src")
+                    .append(File.separator).append("main")
+                    .append(File.separator).append("resources")
+                    .append(File.separator).append("views")
+                    .append(File.separator).toString();
+
             java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
             activeElement = FXMLLoader.load(viewRes);
 

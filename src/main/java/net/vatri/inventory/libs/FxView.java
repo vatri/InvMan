@@ -2,6 +2,9 @@ package net.vatri.inventory.libs;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
+import net.vatri.inventory.App;
+
+import java.net.URL;
 
 public class FxView extends Pane {
 
@@ -10,11 +13,11 @@ public class FxView extends Pane {
     public FxView(String fileName){
 
         try {
-
-            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
-            java.net.URL viewRes = new java.net.URL("file://" + viewPath + fileName + ".fxml");
-            fxElement = FXMLLoader.load(viewRes);
-
+            URL fileUrl = App.class.getResource("/views/" + fileName + ".fxml");
+            if(fileUrl == null){
+                throw new java.io.FileNotFoundException("FXML file can't be found");
+            }
+            fxElement = new FXMLLoader().load(fileUrl);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             // System.out.println(e.printStackTrace());

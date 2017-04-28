@@ -1,5 +1,6 @@
 # InvMan
-Simple JavaFX inventory management application.
+
+Simple desktop multi-platform JavaFX inventory management application.
 
 ## MIT LICENCE
 

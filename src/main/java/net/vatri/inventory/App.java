@@ -1,5 +1,6 @@
 package net.vatri.inventory;
 
+import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -117,10 +118,21 @@ public class App extends Application {
         Parent activeElement = null;
         try {
 
+//            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
 
-            String viewPath = System.getProperty("user.dir") + "/src/main/resources/views/";
-            java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
-            activeElement = FXMLLoader.load(viewRes);
+            // String viewPath = new StringBuilder(System.getProperty("user.dir"))
+            //         .append(File.separator).append("src")
+            //         .append(File.separator).append("main")
+            //         .append(File.separator).append("resources")
+            //         .append(File.separator).append("views")
+            //         .append(File.separator).toString();
+
+            // java.net.URL viewRes = new java.net.URL("file://" + viewPath + viewFile + ".fxml");
+            // activeElement = FXMLLoader.load(viewRes);
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("/views/"+ viewFile +".fxml"));
+            activeElement = loader.load();
 
         } catch (Exception e) {
             System.out.println(e.getCause());

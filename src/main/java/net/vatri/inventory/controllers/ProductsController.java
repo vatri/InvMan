@@ -16,9 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import net.vatri.inventory.App;
+import net.vatri.inventory.libs.BaseController;
 import net.vatri.inventory.models.Product;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 public class ProductsController extends BaseController implements Initializable {
 

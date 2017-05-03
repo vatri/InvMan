@@ -1,10 +1,11 @@
 package net.vatri.inventory.controllers;
 
-import javafx.scene.control.cell.PropertyValueFactory;
 import net.vatri.inventory.App;
 
 import net.vatri.inventory.models.GroupVariant;
 import net.vatri.inventory.models.ProductGroup;
+
+import net.vatri.inventory.libs.BaseController;
 
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.time.LocalDate;

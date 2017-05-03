@@ -8,6 +8,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import net.vatri.inventory.libs.BaseController;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -15,8 +16,6 @@ import org.joda.time.format.DateTimeFormatter;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import net.vatri.querybuilder.*;
 
 public class DashboardController extends BaseController implements Initializable {
 

@@ -14,9 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.Map;
-
 import net.vatri.inventory.App;
+import net.vatri.inventory.libs.BaseController;
 import net.vatri.inventory.models.ProductGroup;
 
 public class GroupsController extends BaseController implements Initializable {

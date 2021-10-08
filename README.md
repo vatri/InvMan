@@ -20,7 +20,7 @@ Totaly free to use, modify, sell, etc.
 
 ## SCREENSHOTS
 
-See here: https://drive.google.com/drive/folders/0BxIbA3Gdn5AQa1ZMa2FHTlRPRms
+See here: https://drive.google.com/drive/folders/0BxIbA3Gdn5AQa1ZMa2FHTlRPRms?resourcekey=0-_nDXwaHRV7ZtLQY9lU7vIg&usp=sharing
 
 ## INSTALL
 
